@@ -1,0 +1,38 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>chart/image/drag.png</file>
+        <file>chart/image/drag_pink.png</file>
+        <file>chart/image/groundstation.png</file>
+        <file>chart/image/groundstation_pink.png</file>
+        <file>chart/image/lolly.png</file>
+        <file>chart/image/reset.png</file>
+        <file>chart/image/zoom.png</file>
+        <file>chart/image/zoom_pink.png</file>
+        <file>chart/script/chartscript.js</file>
+        <file>chart/script/parameterscript.js</file>
+        <file>chart/ChartOperationBar.qml</file>
+        <file>chart/MyChart.qml</file>
+        <file>chart/PointList.qml</file>
+        <file>chart/RotationButton.qml</file>
+        <file>menu/MyDate.qml</file>
+        <file>menu/SerialPortButton.qml</file>
+        <file>menu/SerialPortMessage.qml</file>
+        <file>menu/SetButton.qml</file>
+        <file>menu/SerialPortListView.qml</file>
+        <file>menu/image/setBtn.png</file>
+        <file>menu/image/close.png</file>
+        <file>menu/image/start.png</file>
+        <file>menu/WlanButton.qml</file>
+        <file>menu/image/wlan.png</file>
+        <file>menu/image/serialBtn.png</file>
+        <file>menu/image/handle.png</file>
+        <file>menu/image/vehicle.png</file>
+        <file>menu/WlanListView.qml</file>
+        <file>menu/TextScreen.qml</file>
+        <file>chart/image/start_pink.png</file>
+        <file>chart/image/start.png</file>
+        <file>chart/image/add.png</file>
+        <file>chart/image/clear.png</file>
+    </qresource>
+</RCC>
