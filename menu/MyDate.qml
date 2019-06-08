@@ -32,6 +32,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
             font.bold: true
             font.pixelSize: parent.width*0.14
+            font.family: "Monaco"
             color: "white"
         }
     }

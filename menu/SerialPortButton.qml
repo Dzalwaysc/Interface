@@ -23,9 +23,8 @@ Rectangle {
     property real posX: 0
     property real posY: 0
 
-    // 信号
-    signal shadowTrig()
-    signal listViewTrig()
+    // 当点击了该按钮，该按钮的MouseArea中的onClicked执行完后，发送此信号到外部
+    signal trigger()
 
     states: [
         State {
@@ -57,8 +56,7 @@ Rectangle {
             }else if (serialportButton.state === "active" ){
                 serialportButton.state = "hover";
             }
-            shadowTrig(); // 发送给shadow的信号，在shadow的connection中使用
-            listViewTrig(); //发送给listView的信号
+            trigger();
         }
         onEntered: {
             if(serialportButton.state === "") serialportButton.state = "hover";

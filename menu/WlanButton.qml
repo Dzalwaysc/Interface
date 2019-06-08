@@ -9,14 +9,12 @@ Rectangle{
     width: 50
     height:50
     color: "ivory"
-//    border.color: "black"
     opacity: 0.5
     property real posX: 0
     property real posY: 0
 
-    signal shadowTrig()
-    signal wlanTrig()
-    signal wTrig()
+    // 当点击了该按钮，该按钮的MouseArea中的onClicked执行完后，发送此信号到外部
+    signal trigger()
 
 
     states: [
@@ -48,8 +46,7 @@ Rectangle{
         onClicked: {
             if(wlanButton.state === "hover") wlanButton.state = "active";
             else if (wlanButton.state === "active" ) wlanButton.state = "hover";
-            shadowTrig();
-            wlanTrig();
+            trigger();
         }
         onEntered: {
             if(wlanButton.state === "") wlanButton.state = "hover";

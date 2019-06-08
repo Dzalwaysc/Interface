@@ -21,8 +21,9 @@ Rectangle{
     // 定义这两个属性是因为我们要在该Btn激活的时候，让它的位置移动
     property real posX: 0
     property real posY: 0
-    // 和Dropshadow连接
-    signal shadowTrig()
+
+    // 当点击了该按钮，该按钮的MouseArea中的onClicked执行完后，发送此信号到外部
+    signal trigger()
 
     states: [
         State {
@@ -53,7 +54,7 @@ Rectangle{
         onClicked: {
             if(setButton.state === "hover") setButton.state = "active";
             else if (setButton.state === "active" ) setButton.state = "hover";
-            setButton.shadowTrig();
+            trigger();
         }
         onEntered: {
             if(setButton.state === "") setButton.state = "hover";

@@ -38,6 +38,8 @@ Rectangle{
     color: "white"
     border.color: "white"
 
+    property string fontfamily: "Monaco"
+
     // 用户接口属性
     property real rectwidth: 50
     property real rectheight: 50
@@ -104,14 +106,21 @@ Rectangle{
                 }
             }
 
-            Text {
-                id: introduction_reset
+            Rectangle{
+                id:introduction_reset
+                border.color: "black"; radius: 2
+                width: 40; height: rectheight
                 opacity: 0
-                y: -parent.width
-                anchors.horizontalCenter: resetRect.horizontalCenter
+                y: -40
                 Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
-                text: "reset"; color: "black"
-                font.bold: true
+                anchors.horizontalCenter: resetRect.horizontalCenter
+                Text{
+                    text: "刷新"
+                    color: "black"
+                    anchors.centerIn: parent
+                    font.family: fontfamily
+                    font.bold: true
+                }
             }
         }
 
@@ -121,7 +130,7 @@ Rectangle{
             height: rectheight
             color: "white"
             anchors.top: parent.top
-            anchors.left: resetRect.right; anchors.leftMargin: 10
+            anchors.left: resetRect.right; anchors.leftMargin: 15
             opacity: 0.65
             Image {
                 id: zoom
@@ -133,7 +142,7 @@ Rectangle{
                 State {
                     name: "active"
                     PropertyChanges {target: zoomRect; opacity: 1.0}
-                    PropertyChanges {target: introduction_zoom; opacity: 1.0; color: "#ff1493"; y: -25}
+                    PropertyChanges {target: introduction_zoom; opacity: 1.0; color: "#ff1493"; y: -40}
                 },
                 State {
                     name: "hovering"
@@ -162,14 +171,21 @@ Rectangle{
                 }
             }
 
-            Text {
-                id: introduction_zoom
+            Rectangle{
+                id:introduction_zoom
+                border.color: "black"; radius: 2
+                width: 40; height: rectheight
                 opacity: 0
-                y: -parent.width
+                y: -40
                 Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
                 anchors.horizontalCenter: zoomRect.horizontalCenter
-                text: "zoom"; color: "black"
-                font.bold: true
+                Text{
+                    text: "放大"
+                    color: "black"
+                    anchors.centerIn: parent
+                    font.family: fontfamily
+                    font.bold: true
+                }
             }
         }
 
@@ -179,7 +195,7 @@ Rectangle{
             height: rectheight
             color: "white"
             anchors.top: parent.top
-            anchors.left: zoomRect.right; anchors.leftMargin: 10
+            anchors.left: zoomRect.right; anchors.leftMargin: 15
             opacity: 0.65
             Image {
                 id: drag
@@ -191,7 +207,7 @@ Rectangle{
                 State {
                     name: "active"
                     PropertyChanges {target: dragRect; opacity: 1.0}
-                    PropertyChanges {target: introduction_drag; opacity: 1.0; color: "#ff1493"; y: -25}
+                    PropertyChanges {target: introduction_drag; opacity: 1.0; color: "#ff1493"; y: -40}
                 },
                 State {
                     name: "hovering"
@@ -220,14 +236,21 @@ Rectangle{
                 }
             }
 
-            Text {
+            Rectangle{
                 id: introduction_drag
+                border.color: "black"; radius: 2
+                width: 40; height: rectheight
                 opacity: 0
-                y: -parent.width
+                y: -40
                 Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
                 anchors.horizontalCenter: dragRect.horizontalCenter
-                text: "drag"; color: "black"
-                font.bold: true
+                Text{
+                    text: "拖拽"
+                    color: "black"
+                    anchors.centerIn: parent
+                    font.family: fontfamily
+                    font.bold: true
+                }
             }
         }
 
@@ -237,7 +260,7 @@ Rectangle{
             height: rectheight
             color: "white"
             anchors.top: parent.top
-            anchors.left: dragRect.right; anchors.leftMargin: 10
+            anchors.left: dragRect.right; anchors.leftMargin: 15
             opacity: 0.65
             Image {
                 id: groundstation
@@ -250,7 +273,7 @@ Rectangle{
                 State {
                     name: "active"
                     PropertyChanges {target: groundstationRect; opacity: 1.0}
-                    PropertyChanges {target: introduction_groundstation; opacity: 1.0; color: "#ff1493"; y: -25}
+                    PropertyChanges {target: introduction_groundstation; opacity: 1.0; color: "#ff1493"; y: -40}
                 },
                 State {
                     name: "hovering"
@@ -279,14 +302,21 @@ Rectangle{
                 }
             }
 
-            Text {
+            Rectangle{
                 id: introduction_groundstation
+                border.color: "black"; radius: 2
+                width: 40; height: rectheight
                 opacity: 0
-                y: -parent.width
-                anchors.horizontalCenter: groundstationRect.horizontalCenter
+                y: -40
                 Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
-                text: "ground"; color: "black"
-                font.bold: true
+                anchors.horizontalCenter: groundstationRect.horizontalCenter
+                Text{
+                    text: "地面站"
+                    color: "black"
+                    anchors.centerIn: parent
+                    font.family: fontfamily
+                    font.bold: true
+                }
             }
         }
     }

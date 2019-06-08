@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
-
+import io.tcpclient 1.0
 
 Item {
     id: wlan
@@ -12,13 +12,23 @@ Item {
     property real highligth_opacity: 1
     Behavior on highligth_opacity{SpringAnimation { spring: 2; damping: 0.2 }}
 
-    states: State {
-                name: "active"
-                PropertyChanges {target: wlanB; state: "active"}
+    // 暴露给外部使用的属性
+    property alias listView: listView
+
+    //字体
+    property string fontfamily: "Monaco"
+    property color fontcolor: "black"
+
+    // 点击WlanBtn时，关闭Message窗口
+    signal close()
+    onClose: {
+        clientMessage.state = ""
+        serverMessage.state = ""
+        udpMessage.state = ""
     }
 
     Rectangle{
-        id: wlanB
+        id: listView
         x: posX; y: posY // 最终位置为x:650  y:45
         opacity: 1
         width: delegate_width*4; height: delegate_height
@@ -28,16 +38,16 @@ Item {
 
         states:State {
                 name: "active"
-                PropertyChanges {target: wlanB; opacity: 1; y: posY+90}
-                PropertyChanges {target: wlanB_shadow; opacity: 1}
+                PropertyChanges {target: listView; opacity: 1; y: posY+90}
+                PropertyChanges {target: listView_shadow; opacity: 1}
         }
 
         ListModel{
             id: contactModel
-            ListElement{name: "empty"}
-            ListElement{name: "empty"}
-            ListElement{name: "empty"}
-            ListElement{name: "empty"}
+            ListElement{name: "Server"}
+            ListElement{name: "Client"}
+            ListElement{name: "UDP"}
+            ListElement{name: "预留网络"}
         }
 
         Component{
@@ -51,6 +61,7 @@ Item {
                     textFormat: Text.StyledText
                     color: Qt.lighter("black")
                     text: name
+                    font.family: fontfamily
                 }
             }
         }
@@ -83,8 +94,8 @@ Item {
             id: mousearea1
             x:0; y:0
             width: delegate_width; height: delegate_height
-            enabled: wlanB.opacity == 1
-            hoverEnabled: wlanB.opacity == 1
+            enabled: listView.opacity == 1
+            hoverEnabled: listView.opacity == 1
             onEntered: {
                 highligth_opacity = 1
                 list.currentIndex = 0
@@ -98,8 +109,8 @@ Item {
             id: mousearea2
             x:delegate_width; y:0
             width: delegate_width; height: delegate_height
-            enabled: wlanB.opacity == 1
-            hoverEnabled: wlanB.opacity == 1
+            enabled: listView.opacity == 1
+            hoverEnabled: listView.opacity == 1
             onEntered: {
                 highligth_opacity = 1
                 list.currentIndex = 1
@@ -113,8 +124,8 @@ Item {
             id: mousearea3
             x:delegate_width*2; y:0
             width: delegate_width; height: delegate_height
-            enabled: wlanB.opacity == 1
-            hoverEnabled: wlanB.opacity == 1
+            enabled: listView.opacity == 1
+            hoverEnabled: listView.opacity == 1
             onEntered: {
                 highligth_opacity = 1
                 list.currentIndex = 2
@@ -128,8 +139,8 @@ Item {
             id: mousearea4
             x:delegate_width*3; y:0
             width: delegate_width; height: delegate_height
-            enabled: wlanB.opacity == 1
-            hoverEnabled: wlanB.opacity == 1
+            enabled: listView.opacity == 1
+            hoverEnabled: listView.opacity == 1
             onEntered: {
                 highligth_opacity = 1
                 list.currentIndex = 3
@@ -145,15 +156,56 @@ Item {
     }
 
     DropShadow{
-        id: wlanB_shadow
-        anchors.fill: wlanB
+        id: listView_shadow
+        anchors.fill: listView
         horizontalOffset: 3
         verticalOffset: 3
         radius: 8
         samples: 17
         color: "black"
         opacity: 0
-        source: wlanB
+        source: listView
     }
 
+
+    WlanServerMessage{
+        id: serverMessage
+        Connections{
+            target: mousearea1
+            onClicked: {
+                clientMessage.state = ""
+                udpMessage.state = ""
+                if(serverMessage.state === "") serverMessage.state = "active";
+                else if(serverMessage.state === "active") serverMessage.state = "";
+            }
+        }
+
+    }
+
+    WlanClientMessage{
+        id: clientMessage
+        Connections{
+            target: mousearea2
+            onClicked: {
+                serverMessage.state = ""
+                udpMessage.state = ""
+                if(clientMessage.state === "") clientMessage.state = "active";
+                else if(clientMessage.state === "active") clientMessage.state = "";
+            }
+        }
+    }
+
+    WlanUDPMessage{
+        id: udpMessage
+        Connections{
+            target: mousearea3
+            onClicked: {
+                serverMessage.state = ""
+                clientMessage.state = ""
+                if(udpMessage.state === "") udpMessage.state = "active";
+                else if(udpMessage.state === "active") udpMessage.state = "";
+            }
+        }
+
+    }
 }

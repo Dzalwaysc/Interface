@@ -42,6 +42,8 @@ Item{
     anchors.horizontalCenter: parent.horizontalCenter
     rotation: chart_rotation
 
+    property string fontfamily: "Monaco"
+
     // 坐标轴属性
     property real chart_width
     property real chart_height
@@ -73,7 +75,14 @@ Item{
     // 用来实现reset功能
     signal resetChartView()
 
-    // 当鼠标移到chart区域时，才显示operationBay，因此这里给出鼠标移到chart区域的信号
+    // 将path暴露给外部使用
+    property alias chartView: chartView
+    property alias pathSeries: pathSeries
+    property alias targetPointSeries: targetPointSeries
+    property alias targetLineSeries: targetLineSeries
+    property alias itemMouseArea: itemMouseArea
+
+    // 当鼠标移到chart区域时，才显示operationBar，因此这里给出鼠标移到chart区域的信号
     signal mouseEnterChart()
     signal mouseExitChart()
 
@@ -106,6 +115,7 @@ Item{
             labelsVisible: true
             gridVisible: false
             labelsColor: "red"
+            labelsFont.family: fontfamily
         }
 
         ValueAxis{
@@ -115,6 +125,7 @@ Item{
             lineVisible: true
             labelsVisible: false
             gridVisible: false
+            labelsFont.family: fontfamily
         }
 
         ValueAxis{
@@ -125,6 +136,7 @@ Item{
             labelsVisible: true
             gridVisible: false
             labelsColor: "red"
+            labelsFont.family: fontfamily
         }
 
         ValueAxis{
@@ -135,6 +147,7 @@ Item{
             labelsVisible: false
             gridVisible: false
             labelsColor: "red"
+            labelsFont.family: fontfamily
         }
 
         LineSeries{                       
@@ -156,7 +169,8 @@ Item{
             axisX: axisX; axisY: axisY
             pointsVisible: true; color: "#7cfc00"; borderWidth: 0     //数据点是否可见并需要绘制
             markerSize: 8                                             //标记点的大小
-            pointLabelsVisible: true; pointLabelsColor: "#EFFFE9"
+            pointLabelsVisible: true; pointLabelsColor: "red"
+            pointLabelsFont: fontfamily
             property string state: "ready"
 
             onClicked: {
@@ -193,6 +207,7 @@ Item{
             opacity: 0; color: "black"           //不透明度
             x: itemMouseArea.mouseX + 5; y: itemMouseArea.mouseY - 10
             text: currentx + ", " + currenty
+            font.family: fontfamily
         }
 
         onEntered: {
@@ -269,13 +284,9 @@ Item{
         onClicked: {
             console.log(chartView.mapToPosition(Qt.point(0, 0))); // 用来定位航行器位置
             Script.flashImage();
-            if(myChart.is_groundstation && mouse.button === Qt.LeftButton){
-                Script.groundstationAppend(mouseX, mouseY)
-            }
             if(mouse.button === Qt.RightButton){
                 contextMenu.popup();
             }
-
             // 移动
             if(targetPointSeries.state === "moving"){
                 targetPointSeries.state = "ready"
@@ -328,44 +339,15 @@ Item{
         onTriggered: Script.dragScroll(currentx, currenty)
     }
 
-    PointList{
-        id: pointList
-        x:-chart_width*2;  y: -15
-        location_x: chart_width
-        state: myChart.is_groundstation == true ? "active" : ""
-        onTextInputChanged: {
-            var modifypoint = targetPointSeries.at(index)
-            console.log(targetLineSeries.at(index))
-            if(roles == "positionX" || roles == "positionY"){
-                    targetLineSeries.replace(modifypoint.x, modifypoint.y, model.get(index).positionX, model.get(index).positionY)
-                    targetPointSeries.replace(modifypoint.x, modifypoint.y, model.get(index).positionX, model.get(index).positionY)
-            }
-        }
-        onListView_targetPointAppend: {
-            targetLineSeries.append(0, 0)
-            targetPointSeries.append(0, 0)
-        }
-
-        onStart: {
-            targetLineSeries.opacity = 0.8;
-        }
-        onClear: {
-            targetLineSeries.clear()
-            targetPointSeries.clear()
-            model.clear()
-        }
-    }
-
     Menu{
         id: contextMenu
         width: 60; height: 20
         MenuItem{
-            text: "reset"; font.pixelSize: 10; width: 60; height: 20
+            text: "reset"; font.pixelSize: 10; width: 60; height: 20;font.family: fontfamily
         }
-
         MenuItem{
             id: removeButton
-            text: "move"; font.pixelSize: 10; width: 60; height: 20;
+            text: "move"; font.pixelSize: 10; width: 60; height: 20;font.family: fontfamily
             enabled: targetPointSeries.count > 0
             onEnabledChanged: {
                 if(enabled === true){
@@ -388,7 +370,7 @@ Item{
             }
         }
         MenuItem{
-            text: "delete"; font.pixelSize: 10; width: 60; height: 20;
+            text: "delete"; font.pixelSize: 10; width: 60; height: 20;font.family: fontfamily
         }
     }
 }

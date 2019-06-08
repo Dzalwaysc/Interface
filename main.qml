@@ -6,7 +6,7 @@ import QtGraphicalEffects 1.0
 import io.serialport 1.0
 import "menu"
 import "chart"
-
+import "parapad"
 
 Window {
     visible: true
@@ -19,6 +19,17 @@ Window {
         id: setBtn
         posX: 550; posY: 10
         width: 30; height: 30
+        onTrigger: {
+            // 针对setBtn的阴影
+            if(setBtn.state == "active") setBtn_shadow.state = "active";
+            else if(setBtn.state == "hover") setBtn_shadow.state = "";
+            // 针对serialport
+            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortListView.listView.state = ""; serialPortListView.close();
+            // 针对wlan
+            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanListView.listView.state = "";
+        }
     }
 
     DropShadow{
@@ -37,20 +48,27 @@ Window {
             PropertyChanges {target: setBtn_shadow; opacity: 1}
         }
         Behavior on opacity {NumberAnimation{duration: 100; easing.type: Easing.Linear}}
-
-        Connections{
-            target: setBtn
-            onShadowTrig: {
-                if(setBtn.state == "active") setBtn_shadow.state = "active";
-                else if(setBtn.state == "hover") setBtn_shadow.state = "";
-            }
-        }
     }
 
     SerialPortButton{
         id: serialPortBtn
         posX: 510; posY: 10
         width: 30; height: 30
+        onTrigger: {
+            // 针对serialport的阴影
+            if(serialPortBtn.state == "active") serialPortBtn_shadow.state = "active";
+            else if(serialPortBtn.state == "hover") serialPortBtn_shadow.state = "";
+            // 针对serialport的列表
+            if(serialPortBtn.state === "hover") serialPortListView.listView.state = "";
+            else if(serialPortBtn.state === "active") serialPortListView.listView.state = "active";
+            serialPortListView.close();
+
+            // 针对set
+            setBtn.state = ""; setBtn_shadow.state = "";
+            // 针对wlan
+            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanListView.listView.state = ""; wlanListView.close();
+        }
     }
 
     DropShadow{
@@ -69,20 +87,27 @@ Window {
             PropertyChanges {target: serialPortBtn_shadow; opacity:1}
         }
         Behavior on opacity {NumberAnimation{duration: 100; easing.type: Easing.Linear}}
-
-        Connections{
-            target: serialPortBtn
-            onShadowTrig: {
-                if(serialPortBtn.state == "active") serialPortBtn_shadow.state = "active";
-                else if(serialPortBtn.state == "hover") serialPortBtn_shadow.state = "";
-            }
-        }
     }
 
     WlanButton{
         id: wlanBtn
         posX: 470; posY: 10
         width: 30; height: 30
+        onTrigger: {
+            // 针对wlanBtn的阴影
+            if(wlanBtn.state == "active") wlanBtn_shadow.state = "active";
+            else if(wlanBtn.state == "hover") wlanBtn_shadow.state = "";
+            // 针对wlan的列表
+            if (wlanBtn.state === "hover") wlanListView.listView.state = ""
+            else if (wlanBtn.state === "active") wlanListView.listView.state = "active"
+            wlanListView.close();
+
+            // 针对serialport
+            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortListView.listView.state = ""; serialPortListView.close();
+            // 针对set
+            setBtn.state = ""; setBtn_shadow.state = "";
+        }
     }
 
     DropShadow{
@@ -101,14 +126,6 @@ Window {
             PropertyChanges {target: wlanBtn_shadow; opacity: 1}
         }
         Behavior on opacity {NumberAnimation{duration: 100; easing.type: Easing.Linear}}
-
-        Connections{
-            target: wlanBtn
-            onShadowTrig: {
-                if(wlanBtn.state == "active") wlanBtn_shadow.state = "active";
-                else if(wlanBtn.state == "hover") wlanBtn_shadow.state = "";
-            }
-        }
     }
 
     SerialPortListView{
@@ -116,15 +133,6 @@ Window {
         posX: 510; posY: -45
         delegate_width: 80
         delegate_height: 30
-
-        Connections{
-            target: serialPortBtn
-            onListViewTrig: {
-                if(serialPortBtn.state === "hover") serialPortListView.state = "";
-                else if(serialPortBtn.state === "active") serialPortListView.state = "active";
-                serialPortListView.close();
-            }
-        }
     }
 
     WlanListView{
@@ -132,13 +140,6 @@ Window {
         posX: 470; posY: -45
         delegate_width: 80
         delegate_height: 30
-        Connections{
-            target: wlanBtn
-            onWlanTrig: {
-                if (wlanBtn.state === "hover") wlanListView.state = ""
-                else if (wlanBtn.state === "active") wlanListView.state = "active"
-            }
-        }
     }
 
     MyChart{
@@ -197,7 +198,7 @@ Window {
         rectheight: 20
         rectwidth: 20
         rectmargin: 2
-        anchors.right: myChart.right;   anchors.rightMargin: 15
+        anchors.right: myChart.right;   anchors.rightMargin: 25
         anchors.top: myChart.top;   anchors.topMargin: 15
 
         State {name: "active"; PropertyChanges {target: operationBar; opacity: 1.0}}
@@ -213,5 +214,57 @@ Window {
                 chartOperationBar.opacity = 0
             }
         }
+    }
+
+    PointList{
+        id: pointList
+        x:-380;  y: 230
+        state: myChart.is_groundstation == true ? "active" : ""
+
+        onTextInputChanged: {
+            // textInputChanged(index, roles):
+            // 第一个参数为当前修改的值的位置，第二个参数为修改的内容(no,x,y)
+            var modifypoint = targetPointSeries.at(index)
+            console.log(myChart.targetLineSeries.at(index))
+            if(roles == "positionX" || roles == "positionY"){
+                myChart.targetLineSeries.replace(modifypoint.x, modifypoint.y, pointModel.get(index).positionX, pointModel.get(index).positionY)
+                myChart.targetPointSeries.replace(modifypoint.x, modifypoint.y, pointModel.get(index).positionX, pointModel.get(index).positionY)
+            }
+        }
+
+        onTargetPointAppend: {
+            myChart.targetLineSeries.append(0, 0)
+            myChart.targetPointSeries.append(0, 0)
+        }
+
+        onStart: {
+            myChart.targetLineSeries.opacity = 0.8
+        }
+
+        onClear: {
+            myChart.targetLineSeries.clear()
+            myChart.targetPointSeries.clear()
+            pointModel.clear()
+        }
+
+        Connections{
+            target: myChart.itemMouseArea
+            onClicked: {
+                if(myChart.is_groundstation && mouse.button === Qt.LeftButton){
+                    var mouseX = myChart.itemMouseArea.mouseX;
+                    var mouseY = myChart.itemMouseArea.mouseY;
+                    var newpoint = myChart.chartView.mapToValue(Qt.point(mouseX, mouseY))
+                    myChart.targetPointSeries.append(newpoint.x.toFixed(1), newpoint.y.toFixed(1))
+                    myChart.targetLineSeries.append(newpoint.x.toFixed(1), newpoint.y.toFixed(1))
+                    pointList.pointModel.append({"orderNo": pointList.pointModel.count.toString(),
+                                       "positionX": newpoint.x.toFixed(1).toString(),
+                                       "positionY": newpoint.y.toFixed(1).toString()})
+                }
+            }
+        }
+    }
+
+    ParaPad{
+        x:-2; y: 450
     }
 }

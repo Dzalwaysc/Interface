@@ -33,6 +33,7 @@ import QtQuick 2.0
 Rectangle{
     id: textScreen
     x: 10; y:100
+//    width: rect_width; height: rect_height*(4+1)
     width: rect_width; height: rect_height*(4+1)
     color: "steelblue"
 
@@ -65,7 +66,7 @@ Rectangle{
     property int level2_y: 20; property double level2_opacity: 0.5
     property int level3_y: 0 ; property double level3_opacity: 0.1
 
-    property int rect_width: 250; property int rect_height: 15
+    property int rect_width: 220; property int rect_height: 15
 
     // 内置属性
     property int index: 0 // index始终指向rect0所在的level

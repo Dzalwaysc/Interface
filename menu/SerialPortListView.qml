@@ -6,6 +6,21 @@
         listView.x | listView.y
 
 ** 调整该项对象的位置，需要调整listView中的x和y
+
+** 情况：
+   一开始，listView的状态传递，是通过给serialport写一个状态，代码如下
+   ----------------------------------------------------------
+    states: State {
+                name: "active"
+                PropertyChanges {target: ListView; state: "active"}
+    }
+   ----------------------------------------------------------
+   但是很快发现了问题：状态传导不过去
+情景描述：
+    在就单独对serialportBtn操作的时候一切正常，
+    单在我点开setBtn，然后在再点serialportBtn的时候，发现listView没显示出来
+    <输出：serialport.state="active", 而listView.state="">
+    因此，我将listView暴露给外部使用，在外部直接对listView的状态进行操作
 *****************************************/
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
@@ -17,14 +32,15 @@ Item{
     property real delegate_width: 80
     property real delegate_height: 16
 
+    //字体
+    property string fontfamily: "Monaco"
+
     // 内置属性 highligth的透明度
     property real highligth_opacity: 1
     Behavior on highligth_opacity{SpringAnimation { spring: 2; damping: 0.2 }}           //弹性动画
 
-    states: State {
-                name: "active"
-                PropertyChanges {target: listView; state: "active"}
-    }
+    // 暴露给外部使用的属性
+    property alias listView: listView
 
     // 点击SerialPortBtn时，关闭Message窗口
     signal close()
@@ -50,10 +66,10 @@ Item{
 
         ListModel{
             id: contactModel
-            ListElement{name: "handle"}
-            ListElement{name: "vehicle"}
-            ListElement{name: "empty"}
-            ListElement{name: "empty"}
+            ListElement{name: "遥控串口";}
+            ListElement{name: "艇体串口";}
+            ListElement{name: "预留串口";}
+            ListElement{name: "预留串口";}
         }
 
         Component{
@@ -66,6 +82,7 @@ Item{
                     anchors.centerIn: parent
                     textFormat: Text.StyledText
                     color: Qt.lighter("black")
+                    font.family: fontfamily
                     text: name
                 }
             }
@@ -172,15 +189,14 @@ Item{
         source: listView
     }
 
-    SerialPortMessage{
+    SerialPortHandleMessage{
         id: handleMessage
-        commName: "COM16" /*myTest.portName*/; dataBits: "Data8"; stopBits: "oneStop"; parity: "NoParity"
-        source: "image/handle.png"
-        imgname: "ID: HANDLE"
         Connections{
             target: mousearea1
             onClicked: {
                 vehicleMessage.state = "";
+                gpsMessage.state = "";
+                emptyMessage2.state = "";
                 if(handleMessage.state === "") handleMessage.state = "active";
                 else if(handleMessage.state === "active") handleMessage.state = "";
                 //console.log(handleMessage.x); //配合anchors.right使用，用来获取x的位置
@@ -188,20 +204,47 @@ Item{
         }
     }
 
-    SerialPortMessage{
+    SerialPortVehicleMessage{
         id: vehicleMessage
-        commName: "COM18"; dataBits: "Data8"; stopBits: "oneStop"; parity: "NoParity"
-        source: "image/vehicle.png"
-        imgname: "ID: VEHICLE"
         Connections{
             target: mousearea2
             onClicked: {
                 handleMessage.state = "";
+                gpsMessage.state = "";
+                emptyMessage2.state = "";
                 if(vehicleMessage.state === "") vehicleMessage.state = "active";
                 else if(vehicleMessage.state === "active") vehicleMessage.state = "";
-                console.log(handleMessage.x)
             }
         }
     }
 
+    SerialPortGPSMessage{
+        id: gpsMessage
+        Connections{
+            target: mousearea3
+            onClicked: {
+                handleMessage.state = "";
+                vehicleMessage.state = "";
+                emptyMessage2.state = "";
+                if(gpsMessage.state === "") gpsMessage.state = "active";
+                else if(gpsMessage.state === "active") gpsMessage.state = "";
+            }
+        }
+    }
+
+    SerialPortMessage{
+        id: emptyMessage2
+        commName: " "; dataBits: " "; stopBits: " "; parity: " "
+        imgname: "ID: "
+        Connections{
+            target: mousearea4
+            onClicked: {
+                handleMessage.state = "";
+                vehicleMessage.state = "";
+                emptyMessage1.state = "";
+                if(emptyMessage2.state === "") emptyMessage2.state = "active";
+                else if(emptyMessage2.state === "active") emptyMessage2.state = "";
+            }
+        }
+    }
 }

@@ -23,18 +23,22 @@ import io.serialport 1.0
 
 Rectangle{
     id: serialportMessage
-    width: 350; height: 200
+    width: 380; height: 200
     color: "ivory"
     border.color: "black"
     border.width: 2
     opacity: 0
     radius: 4
-    x: -200
+    x: -380
     y: 10
     property string commName
+    property string buadRate
     property string dataBits
     property string stopBits
     property string parity
+
+    //字体
+    property string fontfamily: "Monaco"
 
     // 这个属性暴露给外部，令其能够改变serialport的图片，这两项属性均在下面的serialImgRect中
     property alias source: serialImg.source
@@ -73,6 +77,7 @@ Rectangle{
         Text {
             id: serialText
             text: imgName
+            font.family: fontfamily
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.bottom; anchors.topMargin: 5
         }
@@ -82,11 +87,12 @@ Rectangle{
     Column{
         anchors.top: serialImgRect.top
         anchors.left: serialImgRect.right; anchors.leftMargin: 50
-        spacing: 10
-        Text{text:"&nbsp;&nbsp;comm name: " + commName/*"Comm1"*/; color: "black"; textFormat: Text.StyledText}
-        Text{text:"&nbsp;&nbsp;data bits: " + dataBits/*"Data8"*/; color: "black"; textFormat: Text.StyledText}
-        Text{text:"&nbsp;&nbsp;stop bits: " + stopBits/*"OneStop"*/; color: "black"; textFormat: Text.StyledText}
-        Text{text:"&nbsp;&nbsp;parity: " + parity/*"NoParity"*/; color: "black"; textFormat: Text.StyledText}
+        spacing: 2
+        Text{text:"串 口: " + commName/*"Comm1"*/; color: "black"; font.family: fontfamily}
+        Text{text:"波特率: " + buadRate/*"9600"*/; color: "black"; font.family: fontfamily}
+        Text{text:"数据位: " + dataBits/*"Data8"*/; color: "black"; font.family: fontfamily}
+        Text{text:"停止位: " + stopBits/*"OneStop"*/; color: "black"; font.family: fontfamily}
+        Text{text:"校验位: " + parity/*"NoParity"*/; color: "black"; font.family: fontfamily}
     }
 
     // 选项卡中的start/close按钮
@@ -96,7 +102,7 @@ Rectangle{
         opacity: 1
         anchors.bottom: parent.bottom; anchors.bottomMargin: 5
         anchors.right: parent.right; anchors.rightMargin: 5
-        source: openbutton.state == "active" ? "image/close.png" : "image/start.png"
+        source: openbutton.state == "active" ? "image/stop.png" : "image/start.png"
 
         states: State {name: "active"}
 
@@ -106,13 +112,12 @@ Rectangle{
 
             onClicked: {
                 if(openbutton.state === ""){
-                    comm.startSlave(comm.portName, comm.waitTimeout, comm.response);
+                    comm.startSlave(comm.portName, comm.response);
                     openbutton.state = "active"
                 }
                 else{
                     comm.suspendSlave();
                     openbutton.state = ""
-                    receScreen.receive(comm.recvMsg);
                 }
             }
         }
@@ -121,15 +126,18 @@ Rectangle{
     // c++的serial port对象
     Comm{
         id: comm
-        portName: commName
-        waitTimeout: 10000     
+        portName: commName   
         response: "hello"
     }
 
     // 选项卡中的文字框
     TextScreen{
-        id: receScreen
+        id: recvScreen
         border.color: "black"
         x: 10; y:120
+        Connections{
+            target: comm
+            onRecvMsgChanged: recvScreen.receive(comm.recvMsg)
+        }
     }
 }
