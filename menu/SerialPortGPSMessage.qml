@@ -142,6 +142,7 @@ Rectangle{
             text: "hello"
         }
     }
+
     // 发送按钮
     ButtonOne{
         id: sendBtn
@@ -149,13 +150,13 @@ Rectangle{
         btnText: "发送"
         anchors.top: sendScreen.top;
         anchors.left: sendScreen.right; anchors.leftMargin: 5
-        onClicked: console.log("hi")
+        onClicked: comm.sendResponse();
     }
 
     // c++的serial port对象
     Comm{
         id: comm
         portName: commName
-        response: "hello"
+        response: sendText.text
     }
 }

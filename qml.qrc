@@ -41,5 +41,7 @@
         <file>menu/WlanClientMessage.qml</file>
         <file>menu/SerialPortVehicleMessage.qml</file>
         <file>menu/SerialPortGPSMessage.qml</file>
+        <file>board/CourseBoard.qml</file>
+        <file>board/VelocityBoard.qml</file>
     </qresource>
 </RCC>

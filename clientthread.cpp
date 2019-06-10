@@ -16,11 +16,14 @@ ClientThread::~ClientThread()
     wait();
 }
 
-void ClientThread::requestFortune(const QString &hostName, quint16 port)
+
+// 开始关闭函数
+void ClientThread::startFortune(const QString &hostName, quint16 port)
 {
     QMutexLocker locker(&m_mutex);
     m_hostName = hostName;
     m_port = port;
+    m_quit = false;
     if(!isRunning()){
         qDebug()<<"start";
         start();
@@ -59,6 +62,14 @@ void ClientThread::run()
     socket.disconnectFromHost();
 }
 
+void ClientThread::closeFortune()
+{
+    m_mutex.lock();
+    m_quit = true;
+    m_mutex.unlock();
+}
+
+// 属性函数
 QString ClientThread::hostName()
 {
     return m_hostName;
@@ -85,11 +96,9 @@ void ClientThread::setport(int port)
     emit portChanged();
 }
 
-void ClientThread::closeFortune()
+
+// 发送函数
+void ClientThread::sendResponse()
 {
-    m_mutex.lock();
-    m_quit = true;
-    m_mutex.unlock();
-    //this->wait();
-    //wait();
+    return;
 }

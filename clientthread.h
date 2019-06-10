@@ -15,8 +15,9 @@ public:
     ClientThread(QObject *parent = nullptr);
     ~ClientThread() override;
 
-    Q_INVOKABLE void requestFortune(const QString &hostName, quint16 port);
+    Q_INVOKABLE void startFortune(const QString &hostName, quint16 port);
     Q_INVOKABLE void closeFortune();
+    Q_INVOKABLE void sendResponse();
     void run() override;
 
 signals:
@@ -30,6 +31,7 @@ private:
     QMutex m_mutex;
     bool m_quit;
 
+    QTcpSocket m_socket;
 public:
     QString hostName();
     int port();

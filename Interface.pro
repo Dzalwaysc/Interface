@@ -19,7 +19,8 @@ SOURCES += \
     slavethread.cpp \
     clientthread.cpp \
     fortuneserver.cpp \
-    fortunethread.cpp
+    fortunethread.cpp \
+    udpclass.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,4 +39,5 @@ HEADERS += \
     slavethread.h \
     clientthread.h \
     fortuneserver.h \
-    fortunethread.h
+    fortunethread.h \
+    udpclass.h

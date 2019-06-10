@@ -1,10 +1,7 @@
 #ifndef SLAVETHREAD_H
 #define SLAVETHREAD_H
 
-#include <QMutex>
 #include <QThread>
-#include <QWaitCondition>
-#include <QTextStream>
 #include <QSerialPort>
 
 class SlaveThread : public QThread
@@ -12,34 +9,29 @@ class SlaveThread : public QThread
     Q_OBJECT
 
     Q_PROPERTY(QString portName READ portName WRITE setportName NOTIFY portNameChanged)
-    Q_PROPERTY(QString response READ response WRITE setresponse NOTIFY responseChanged)
+    Q_PROPERTY(QByteArray response READ response WRITE setresponse NOTIFY responseChanged)
     Q_PROPERTY(QByteArray recvMsg READ recvMsg NOTIFY recvMsgChanged)
 
 public:
     explicit SlaveThread(QObject *parent = nullptr);
     ~SlaveThread() override;
 
-    Q_INVOKABLE void startSlave(const QString &portName, const QString &response);
+    Q_INVOKABLE void startSlave();
     Q_INVOKABLE void closeSlave();
     Q_INVOKABLE void sendResponse();
 
-signals:
-    // 串口数据处理信号
-    void error(const QString &s);
-    void timeout(const QString &s);
+private slots:
+    void handleReadyRead();
+    void handleError(QSerialPort::SerialPortError error);
+    void handleBytesWritten(qint64 bytes);
 
 private:
-    void run() override;
+    QSerialPort m_serial;
 
     QString m_portName;
-    QString m_response;
-    QMutex m_mutex;
-    bool m_quit = false;
-
-    QSerialPort m_serial;
+    QByteArray m_response;
     QByteArray m_recvMsg;
-    QTextStream standardOutput;
-
+    qint64 m_bytesWritten = 0;
 signals:
     // 属性信号
     void portNameChanged();
@@ -50,8 +42,8 @@ public:
     // 属性函数
     QString portName();
     void setportName(const QString &portName);
-    QString response();
-    void setresponse(const QString &response);
+    QByteArray response();
+    void setresponse(const QByteArray &response);
     QByteArray recvMsg();
 };
 

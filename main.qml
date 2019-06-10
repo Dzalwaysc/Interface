@@ -7,13 +7,14 @@ import io.serialport 1.0
 import "menu"
 import "chart"
 import "parapad"
+import "board"
 
 Window {
     visible: true
     width: 1024
     height: 668
     title: qsTr("Hello World")
-    color: "ivory"
+    color: Qt.lighter("black")
 
     SetButton{
         id: setBtn
@@ -266,5 +267,13 @@ Window {
 
     ParaPad{
         x:-2; y: 450
+    }
+
+    VelocityBoard{
+        id: dashBoard
+        x: 20; y: 210
+    }
+    CourseBoard{
+        x: 240; y: 210
     }
 }

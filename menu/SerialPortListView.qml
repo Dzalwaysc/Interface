@@ -68,7 +68,7 @@ Item{
             id: contactModel
             ListElement{name: "遥控串口";}
             ListElement{name: "艇体串口";}
-            ListElement{name: "预留串口";}
+            ListElement{name: "北斗串口";}
             ListElement{name: "预留串口";}
         }
 

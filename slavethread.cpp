@@ -12,96 +12,37 @@
 #include <QDebug>
 
 SlaveThread::SlaveThread(QObject *parent) :
-    QThread(parent),
-    standardOutput(stdout)
+    QThread(parent)
 {
 }
 
 SlaveThread::~SlaveThread()
 {
-    m_mutex.lock();
-    m_quit = true;
-    m_mutex.unlock();
-    wait();
 }
 
-void SlaveThread::startSlave(const QString &portName, const QString &response)
+// 开始关闭函数
+void SlaveThread::startSlave()
 {
-    const QMutexLocker locker(&m_mutex);
-    m_portName = portName;
-    m_response = response;
-    m_quit = false;
-
-    if(!isRunning())
-        start();
-}
-
-void SlaveThread::run()
-{
-    bool currentPortNameChanged = false;
-
-    m_mutex.lock();
-    QString currentPortName;
-    if(currentPortName != m_portName){
-        currentPortName = m_portName;
-        currentPortNameChanged = true;
-    }
-
-    int Timeout = 5*1000;
-    QString currentRespone = m_response;
-    m_mutex.unlock();
-
-
+    m_serial.setPortName(m_portName);
     m_serial.setBaudRate(QSerialPort::Baud9600);
     m_serial.setDataBits(QSerialPort::Data8);
     m_serial.setStopBits(QSerialPort::OneStop);
     m_serial.setParity(QSerialPort::NoParity);
 
-    while(!m_quit){
-        if(currentPortNameChanged){
-            m_serial.close();
-            m_serial.setPortName(currentPortName);
-
-            if(!m_serial.open(QIODevice::ReadWrite)){
-                emit error(tr("Can't open %1, error code %2")
-                           .arg(m_portName)
-                           .arg(m_serial.error() ));
-                return;
-            }
-        }
-
-        if(m_serial.waitForReadyRead(Timeout)){
-            //read request
-            QByteArray requestData = m_serial.readAll();
-            while(m_serial.waitForReadyRead(10))
-                requestData += m_serial.readAll();
-            //show request
-            standardOutput << requestData << endl;
-            m_recvMsg = requestData;
-            emit this->recvMsgChanged();
-            //write response
-            const QByteArray responseData = currentRespone.toUtf8();
-            m_serial.write(responseData);
-            if(!m_serial.waitForBytesWritten(Timeout)){
-                emit timeout(tr("Wait write response timeout %1")
-                             .arg(QTime::currentTime().toString() ));
-            }
-        }else{
-            emit timeout(tr("Wait read request timeout %1")
-                         .arg(QTime::currentTime().toString() ));
-        }
-
-        m_mutex.lock();
-        if(currentPortName != m_portName){
-            currentPortName = m_portName;
-            currentPortNameChanged = true;
-        }else{
-            currentPortNameChanged = false;
-        }
-
-        currentRespone = m_response;
-        m_mutex.unlock();
+    if(!m_serial.open(QIODevice::ReadWrite)){
+        qDebug()<<tr("serial open failed %1").arg(m_portName);
+        return;
     }
+    connect(&m_serial, &QSerialPort::readyRead, this, &SlaveThread::handleReadyRead);
+    connect(&m_serial, &QSerialPort::bytesWritten, this, &SlaveThread::handleBytesWritten);
+    connect(&m_serial,
+            static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+            this, &SlaveThread::handleError);
+}
+
+void SlaveThread::closeSlave()
+{
+    m_serial.close();
 }
 
 // property函数
@@ -110,7 +51,7 @@ QString SlaveThread::portName()
     return m_portName;
 }
 
-QString SlaveThread::response()
+QByteArray SlaveThread::response()
 {
     return m_response;
 }
@@ -128,7 +69,7 @@ void SlaveThread::setportName(const QString &portName)
     emit portNameChanged();
 }
 
-void SlaveThread::setresponse(const QString &response)
+void SlaveThread::setresponse(const QByteArray &response)
 {
     if(m_response == response)
         return;
@@ -136,17 +77,42 @@ void SlaveThread::setresponse(const QString &response)
     emit responseChanged();
 }
 
-void SlaveThread::closeSlave()
+// 读写处理函数
+void SlaveThread::handleReadyRead()
 {
-    m_mutex.lock();
-    m_quit = true;
-    m_mutex.unlock();
-    wait();
+    m_recvMsg = m_serial.readAll();
+    qDebug()<<m_recvMsg;
+    emit recvMsgChanged();
+}
+
+void SlaveThread::handleBytesWritten(qint64 bytes)
+{
+    m_bytesWritten += bytes;
+    if(m_bytesWritten == m_response.size()){
+        m_bytesWritten = 0;
+        qDebug()<<tr("SerialData Successfully sent to port %1")
+                  .arg(m_serial.portName());
+    }
 }
 
 void SlaveThread::sendResponse()
 {
     //write response
-    const QByteArray responseData = "currentRespone.toUtf8()";
-    m_serial.write(responseData);
+    const QByteArray responseData = m_response;
+    const qint64 bytes = m_serial.write(responseData);
+    if(bytes == -1){
+        qDebug()<<tr("Failed to write the data to port %1, error %2")
+                  .arg(m_serial.portName())
+                  .arg(m_serial.errorString());
+    }else if(bytes != m_response.size()){
+        qDebug()<<tr("Failed to write the all data to port %1, error %2")
+                  .arg(m_serial.portName())
+                  .arg(m_serial.errorString());
+    }
+}
+
+// 处理错误
+void SlaveThread::handleError(QSerialPort::SerialPortError serialPortError)
+{
+    qDebug()<<serialPortError;
 }

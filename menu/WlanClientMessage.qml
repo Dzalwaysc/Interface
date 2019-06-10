@@ -149,11 +149,8 @@ Rectangle{
         btnWidth: 60; btnHeight: 20
         btnText: "连接"
         onClicked: {
-            if(goButton.state == ""){
-                showName.text = "服务器已连接..."
-                downButton.state = ""
-                tcpClient.requestFortune(tcpClient.hostName, tcpClient.port);
-            }
+            showName.text = "服务器已连接..."
+            tcpClient.startFortune(tcpClient.hostName, tcpClient.port);
         }
     }
 
@@ -163,11 +160,8 @@ Rectangle{
         btnWidth: 60; btnHeight: 20
         btnText: "断开连接"
         onClicked: {
-            if(downButton.state == ""){
-                goButton.state = ""
-                showName.text = "服务器断开..."
-                tcpClient.closeFortune();
-            }
+            tcpClient.closeFortune();
+            showName.text = "服务器断开..."
         }
     }
 
@@ -214,6 +208,6 @@ Rectangle{
     TcpClient{
         id: tcpClient
         port: 8000
-        hostName: "127.0.0.1"
+        hostName: "192.168.3.154"
     }
 }

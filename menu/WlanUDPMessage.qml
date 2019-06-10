@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import "../button"
+import io.udp 1.0
 
 Rectangle{
     id: wlanUDPMessage
@@ -32,6 +33,7 @@ Rectangle{
         }
     ]
 
+    // 协议烈性
     Text {
         id: agreeName
         anchors.top: parent.top; anchors.topMargin: 10
@@ -61,6 +63,7 @@ Rectangle{
         }
     }
 
+    // 本地IP
     Text {
         id: localIPName
         anchors.top: parent.top; anchors.topMargin: 10
@@ -72,7 +75,7 @@ Rectangle{
 
     Rectangle{
         id:localIPInfo
-        width: 100; height: 20
+        width: 120; height: 20
         anchors.left: parent.left; anchors.leftMargin: 120
         anchors.top: localIPName.bottom
         color: "white"
@@ -83,17 +86,18 @@ Rectangle{
             color: "black"
             font.pixelSize: 13
             focus: true
-            text: "我"
+            text: udp.localHostName
             font.family: fontfamily
             selectByMouse: true
             selectedTextColor: "red"
         }
     }
 
+    // 本地端口
     Text{
         id: localprName
-        anchors.top: localIPInfo.bottom; anchors.topMargin: 10
-        anchors.left: parent.left; anchors.leftMargin: 120
+        anchors.top: localIPName.top;
+        anchors.left: localIPName.left; anchors.leftMargin: 140
         text: "本地端口: "
         color: fontcolor
         font.family: fontfamily
@@ -102,8 +106,8 @@ Rectangle{
     Rectangle{
         id:localprInfo
         width: 100; height: 20
-        anchors.left: parent.left; anchors.leftMargin: 120
         anchors.top: localprName.bottom
+        anchors.left: localprName.left
         color: "white"
         border.color: "#a3a380"
         TextInput{
@@ -112,17 +116,48 @@ Rectangle{
             color: "black"
             font.pixelSize: 13
             focus: true
-            text: "最"
+            text: udp.localPort
             font.family: fontfamily
             selectByMouse: true
             selectedTextColor: "red"
         }
     }
 
+    // 目标IP
+    Text{
+        id: targgetIPName
+        anchors.top: localIPInfo.bottom; anchors.topMargin: 10
+        anchors.left: localIPInfo.left
+        text: "目标IP: "
+        color: fontcolor
+        font.family: fontfamily
+    }
+
+    Rectangle{
+        id:targetIPInfo
+        width: 120; height: 20
+        anchors.top: targgetIPName.bottom
+        anchors.left: targgetIPName.left
+        color: "white"
+        border.color: "#a3a380"
+        TextInput{
+            anchors.verticalCenter: parent.verticalCenter
+            x:10
+            color: "black"
+            font.pixelSize: 13
+            focus: true
+            text: udp.targetHostName
+            font.family: fontfamily
+            selectByMouse: true
+            selectedTextColor: "red"
+        }
+    }
+
+    // 目标端口
     Text{
         id: targetprName
-        anchors.top: parent.top; anchors.topMargin: 10
-        anchors.left: parent.left; anchors.leftMargin: 230
+        anchors.top: targgetIPName.top;
+        anchors.left: targgetIPName.left; anchors.leftMargin: 140
         text: "目标端口: "
         color: fontcolor
         font.family: fontfamily
@@ -131,8 +166,8 @@ Rectangle{
     Rectangle{
         id:targetprInfo
         width: 100; height: 20
-        anchors.left: parent.left; anchors.leftMargin: 230
         anchors.top: targetprName.bottom
+        anchors.left: targetprName.left
         color: "white"
         border.color: "#a3a380"
         TextInput{
@@ -141,42 +176,14 @@ Rectangle{
             color: "black"
             font.pixelSize: 13
             focus: true
-            text: "最"
+            text: udp.targetPort
             font.family: fontfamily
             selectByMouse: true
             selectedTextColor: "red"
         }
     }
 
-    Text{
-        id: targgetIPName
-        anchors.top: targetprInfo.bottom; anchors.topMargin: 10
-        anchors.left: parent.left; anchors.leftMargin: 230
-        text: "目标IP: "
-        color: fontcolor
-        font.family: fontfamily
-    }
-
-    Rectangle{
-        id:targetIPInfo
-        width: 100; height: 20
-        anchors.left: parent.left; anchors.leftMargin: 230
-        anchors.top: targgetIPName.bottom
-        color: "white"
-        border.color: "#a3a380"
-        TextInput{
-            anchors.verticalCenter: parent.verticalCenter
-            x:10
-            color: "black"
-            font.pixelSize: 13
-            focus: true
-            text: "帅"
-            font.family: fontfamily
-            selectByMouse: true
-            selectedTextColor: "red"
-        }
-    }
-
+    // 接受框
     Text {
         id: accept
         anchors.top: parent.top; anchors.topMargin: 90
@@ -193,6 +200,7 @@ Rectangle{
         x: 10; y:110
     }
 
+    // 发送框
     Rectangle{
         id:input
         width: 180; height: 25
@@ -206,7 +214,8 @@ Rectangle{
             font.pixelSize: 13
             focus: true
             font.family: fontfamily
-            text:"你好帅你好帅你好帅"
+            text: udp.response
+            onAccepted: udp.response = text;
         }
     }
 
@@ -215,8 +224,10 @@ Rectangle{
         x:195; y:170
         btnWidth: 30; btnHeight: 25
         btnText: "发送"
+        onClicked: udp.sendData();
     }
 
+    // 状态栏
     Text{
         id: showName
         x:245; y:110
@@ -226,16 +237,15 @@ Rectangle{
         font.family: fontfamily
     }
 
+    // 开始关闭按钮
     ButtonOne{
         id: goButton
         x: 245; y:135
         btnWidth: 60; btnHeight: 20
         btnText: "连接"
         onClicked: {
-            if(goButton.state == ""){
-                downButton.state = ""
-                showName.text = "已绑定..."
-            }
+            udp.bindSocket();
+            showName.text = "已绑定..."
         }
     }
 
@@ -245,10 +255,18 @@ Rectangle{
         btnWidth: 60; btnHeight: 20
         btnText: "断开连接"
         onClicked: {
-            if(downButton.state == ""){
-                showName.text = "未绑定..."
-                goButton.state = ""
-            }
+            udp.closeSocket();
+            showName.text = "未绑定..."
         }
+    }
+
+    // UDP对象
+    Udp{
+        id: udp
+        localHostName: "192.168.3.143"
+        targetHostName: "192.168.3.154"
+        localPort: 8000
+        targetPort: 8000
+        response: "hello"
     }
 }
