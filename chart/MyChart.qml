@@ -38,8 +38,7 @@ Item{
     id: myChart
     width: chart_width
     height: chart_height
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
+    x: posX; y: posY
     rotation: chart_rotation
 
     property string fontfamily: "Monaco"
@@ -52,6 +51,8 @@ Item{
     property real axisX_max: 800
     property real axisY_min: 0
     property real axisY_max: 800
+    property real posX: 0
+    property real posY: 0
 
     // 坐标轴内的值
     property real originx: 0
@@ -85,6 +86,22 @@ Item{
     // 当鼠标移到chart区域时，才显示operationBar，因此这里给出鼠标移到chart区域的信号
     signal mouseEnterChart()
     signal mouseExitChart()
+
+    states: State {
+        name: "active"
+        PropertyChanges {target: myChart; x: posX-600}
+    }
+
+    transitions: [
+        Transition {
+            from: "active"; to: ""; reversible: false
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
+        },
+        Transition {
+            from: ""; to: "active"; reversible: false
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
+        }
+    ]
 
     onResetChartView: {
         axisX.min = axisX_min; axisX.max = axisX_max;
@@ -150,7 +167,7 @@ Item{
             labelsFont.family: fontfamily
         }
 
-        LineSeries{                       
+        LineSeries{
             id: pathSeries
             axisX: axisX
             axisY: axisY
@@ -164,7 +181,7 @@ Item{
             XYPoint { x: 10;  y: 10 }
         }
 
-        ScatterSeries{                                  
+        ScatterSeries{
             id: targetPointSeries
             axisX: axisX; axisY: axisY
             pointsVisible: true; color: "#7cfc00"; borderWidth: 0     //数据点是否可见并需要绘制

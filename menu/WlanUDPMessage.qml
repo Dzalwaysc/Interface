@@ -33,7 +33,7 @@ Rectangle{
         }
     ]
 
-    // 协议烈性
+    // 协议类型
     Text {
         id: agreeName
         anchors.top: parent.top; anchors.topMargin: 10

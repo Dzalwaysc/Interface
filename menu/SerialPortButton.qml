@@ -17,7 +17,7 @@ Rectangle {
     height: 50
     x: posX; y: posY
     radius: 5
-    color:"ivory"
+    color:Qt.lighter("#CCC")//"ivory"
     opacity: 0.5
     // 用户属性
     property real posX: 0

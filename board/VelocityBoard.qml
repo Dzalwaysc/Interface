@@ -113,6 +113,7 @@ Rectangle {
     CircularGauge{
         id: small
 
+        width: 200; height: 200
         value: accelerating ? maximumValue : 0
         property bool accelerating: false
 

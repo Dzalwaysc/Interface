@@ -17,15 +17,37 @@ import QtQuick.Controls 1.4
 
 Rectangle{
     id:actualParameter
+    x: posX; y: posY
     color: "ivory"
     border.color: "black"
     border.width: 2
     radius: 4
-    width: 380; height: 200
+    opacity: 0
+    width: 300; height: 120
 
-    property real fontsize: 16
+    property real posX: 0
+    property real posY: 0
+
+    property real fontsize: 12
     property color fontcolor: "black"
     property string fontfamily: "Monaco"
+
+
+    states: State {
+        name: "active"
+        PropertyChanges {target: actualParameter; opacity: 1; x: posX-320}
+    }
+
+    transitions: [
+        Transition {
+            from: ""; to: "active"; reversible: false
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
+        },
+        Transition {
+            from: "active"; to: ""; reversible: false
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
+        }
+    ]
 
     Text {
         id: title

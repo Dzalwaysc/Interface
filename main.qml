@@ -8,6 +8,7 @@ import "menu"
 import "chart"
 import "parapad"
 import "board"
+import "background"
 
 Window {
     visible: true
@@ -15,6 +16,15 @@ Window {
     height: 668
     title: qsTr("Hello World")
     color: Qt.lighter("black")
+
+//    StarBackground2{
+//        id: background
+//        anchors.centerIn: parent
+//    }
+
+    BeautifulNight{
+        anchors.centerIn: parent
+    }
 
     SetButton{
         id: setBtn
@@ -29,7 +39,9 @@ Window {
             serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对wlan
             wlanBtn.state = ""; wlanBtn_shadow.state = "";
-            wlanListView.listView.state = "";
+            wlanListView.listView.state = ""; wlanListView.close();
+            //针对parapad
+            parapadbutton.state = ""; parapad.state = ""
         }
     }
 
@@ -69,6 +81,9 @@ Window {
             // 针对wlan
             wlanBtn.state = ""; wlanBtn_shadow.state = "";
             wlanListView.listView.state = ""; wlanListView.close();
+
+            //针对parapad
+            parapadbutton.state = ""; parapad.state = ""
         }
     }
 
@@ -79,7 +94,7 @@ Window {
         verticalOffset: 3
         radius: 8.0
         samples: 17
-        color: "black"
+        color: "ivory"
         opacity: 0
         source: serialPortBtn
 
@@ -108,6 +123,8 @@ Window {
             serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对set
             setBtn.state = ""; setBtn_shadow.state = "";
+            //针对parapad
+            parapadbutton.state = ""; parapad.state = ""
         }
     }
 
@@ -147,40 +164,37 @@ Window {
         id: myChart
         chart_width: 500
         chart_height: 500
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 80
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 250
+        posX: 1112; posY: 164
         //创建与ChartOperationBar的信号连接
         Connections{
             target: chartOperationBar
             onZoomIconClicked: {
-                if(chartOperationBar.zoomIconState == "") myChart.is_zoom = false;
+                if(chartOperationBar.zoomIconState === "") myChart.is_zoom = false;
                 else myChart.is_zoom = true;
-                if(chartOperationBar.dragIconState == "active"){
+                if(chartOperationBar.dragIconState === "active"){
                    chartOperationBar.dragIconState = ""; myChart.is_drag = false;
                 }
-                if(chartOperationBar.groundstationIconState == "active"){
+                if(chartOperationBar.groundstationIconState === "active"){
                     chartOperationBar.groundstationIconState = ""; myChart.is_groundstation = false;
                }
             }
             onDragIconClicked: {
-                if(chartOperationBar.dragIconState == "") myChart.is_drag = false;
+                if(chartOperationBar.dragIconState === "") myChart.is_drag = false;
                 else myChart.is_drag = true;
-                if(chartOperationBar.zoomIconState == "active"){
+                if(chartOperationBar.zoomIconState === "active"){
                     chartOperationBar.zoomIconState = ""; myChart.is_zoom = false;
                 }
-                if(chartOperationBar.groundstationIconState == "active"){
+                if(chartOperationBar.groundstationIconState === "active"){
                     chartOperationBar.groundstationIconState = ""; myChart.is_groundstation = false;
                 }
             }
             onGroundstationIconClicked: {
-                if(chartOperationBar.groundstationIconState == "") myChart.is_groundstation = false;
+                if(chartOperationBar.groundstationIconState === "") myChart.is_groundstation = false;
                 else myChart.is_groundstation = true;
-                if(chartOperationBar.zoomIconState == "active"){
+                if(chartOperationBar.zoomIconState === "active"){
                     chartOperationBar.zoomIconState = ""; myChart.is_zoom = false;
                 }
-                if(chartOperationBar.dragIconState == "active"){
+                if(chartOperationBar.dragIconState === "active"){
                     chartOperationBar.dragIconState = ""; myChart.is_drag = false;
                 }
             }
@@ -190,6 +204,24 @@ Window {
                 chartOperationBar.groundstationIconState = ""; myChart.is_groundstation = false;
                 myChart.resetChartView();
             }
+        }
+    }
+
+    ChartButton{
+        id: chartbutton
+        posX: 1010; posY: 350
+        onParapadTrigger: {
+            if(chartbutton.state == "active") myChart.state = "active"
+            else if(chartbutton.state == "hover") myChart.state = ""
+
+            // 针对serialport
+            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortListView.listView.state = ""; serialPortListView.close();
+            // 针对wlan
+            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanListView.listView.state = ""; wlanListView.close();
+            //针对set
+            setBtn.state = ""; setBtn_shadow.state = "";
         }
     }
 
@@ -266,14 +298,52 @@ Window {
     }
 
     ParaPad{
-        x:-2; y: 450
+        id: parapad
+        posX: 1025; posY: 20
+    }
+
+    ParaPadButton{
+        id: parapadbutton
+        posX: 1010; posY: 20
+        onParapadTrigger: {
+            if(parapadbutton.state == "active") parapad.state = "active"
+            else if(parapadbutton.state == "hover") parapad.state = ""
+
+            // 针对serialport
+            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortListView.listView.state = ""; serialPortListView.close();
+            // 针对wlan
+            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanListView.listView.state = ""; wlanListView.close();
+            //针对set
+            setBtn.state = ""; setBtn_shadow.state = "";
+        }
     }
 
     VelocityBoard{
         id: dashBoard
-        x: 20; y: 210
+        x: 20; y: 410
     }
+
     CourseBoard{
-        x: 240; y: 210
+        id: courseboard
+        x: 240; y: 410
+    }
+
+    WaveProgress2{
+        id: waveprogress
+        x: 40; y: 420
+    }
+
+    ArcBoard{
+        id: arcboard
+//        x: 100; y: 410
+        x: 200; y: 360
+
+    }
+
+    MyCampass{
+        id: mycampass
+        x: 230; y: 410
     }
 }
