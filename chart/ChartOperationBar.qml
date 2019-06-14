@@ -75,9 +75,14 @@ Rectangle{
 
             states: [
                 State {
-                    name: "hovering"
+                    name: "hover"
                     PropertyChanges {target: resetRect; opacity: 1.0}
                     PropertyChanges {target: introduction_reset; opacity: 1.0}
+                },
+                State {
+                    name: ""
+                    PropertyChanges {target: groundstationRect; opacity: 0.65}
+                    PropertyChanges {target: introduction_groundstation; opacity: 0.0}
                 }
             ]
 
@@ -98,7 +103,7 @@ Rectangle{
                     rotaionAnimation.restart();
                 }
                 onEntered: {
-                    if(resetRect.state === "") resetRect.state = "hovering";
+                    if(resetRect.state === "") resetRect.state = "hover";
                     operationBar.opacity = 1
                 }
                 onExited: {
@@ -145,9 +150,14 @@ Rectangle{
                     PropertyChanges {target: introduction_zoom; opacity: 1.0; color: "#ff1493"; y: -40}
                 },
                 State {
-                    name: "hovering"
+                    name: "hover"
                     PropertyChanges {target: zoomRect; opacity: 1.0}
                     PropertyChanges {target: introduction_zoom; opacity: 1.0}
+                },
+                State {
+                    name: ""
+                    PropertyChanges {target: zoomRect; opacity: 0.65}
+                    PropertyChanges {target: introduction_zoom; opacity: 0.0}
                 }
             ]
 
@@ -162,7 +172,7 @@ Rectangle{
                     operationBar.zoomIconClicked();
                 }
                 onEntered: {
-                    if(zoomRect.state === "") zoomRect.state = "hovering";
+                    if(zoomRect.state === "") zoomRect.state = "hover";
                     operationBar.opacity = 1
                 }
                 onExited: {
@@ -210,9 +220,14 @@ Rectangle{
                     PropertyChanges {target: introduction_drag; opacity: 1.0; color: "#ff1493"; y: -40}
                 },
                 State {
-                    name: "hovering"
+                    name: "hover"
                     PropertyChanges {target: dragRect; opacity: 1.0}
                     PropertyChanges {target: introduction_drag; opacity: 1.0}
+                },
+                State {
+                    name: ""
+                    PropertyChanges {target: dragRect; opacity: 0.65}
+                    PropertyChanges {target: introduction_drag; opacity: 0.0}
                 }
             ]
 
@@ -227,7 +242,7 @@ Rectangle{
                     operationBar.dragIconClicked();
                 }
                 onEntered: {
-                    if(dragRect.state === "") dragRect.state = "hovering";
+                    if(dragRect.state === "") dragRect.state = "hover";
                     operationBar.opacity = 1
                 }
                 onExited: {
@@ -276,9 +291,14 @@ Rectangle{
                     PropertyChanges {target: introduction_groundstation; opacity: 1.0; color: "#ff1493"; y: -40}
                 },
                 State {
-                    name: "hovering"
+                    name: "hover"
                     PropertyChanges {target: groundstationRect; opacity: 1.0}
                     PropertyChanges {target: introduction_groundstation; opacity: 1.0}
+                },
+                State {
+                    name: ""
+                    PropertyChanges {target: groundstationRect; opacity: 0.65}
+                    PropertyChanges {target: introduction_groundstation; opacity: 0.0}
                 }
             ]
 
@@ -293,7 +313,7 @@ Rectangle{
                     operationBar.groundstationIconClicked();
                 }
                 onEntered: {
-                    if(groundstationRect.state === "") groundstationRect.state = "hovering";
+                    if(groundstationRect.state === "") groundstationRect.state = "hover";
                     operationBar.opacity = 1
                 }
                 onExited: {

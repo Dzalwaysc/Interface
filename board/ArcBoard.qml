@@ -23,18 +23,7 @@ Rectangle{
         minimumValue: 0
         maximumValue: 100
 
-        value: accelerating ? maximumValue+2 : 0+2
-        property bool accelerating: false
-
-        Keys.onSpacePressed: accelerating = true
-        Keys.onReleased: {
-            if (event.key === Qt.Key_Space) {
-                 accelerating = false;
-                 event.accepted = true;
-             }
-        }
-
-        Component.onCompleted: forceActiveFocus()
+        value: 0
 
 
         Behavior on value {

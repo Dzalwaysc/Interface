@@ -1,10 +1,12 @@
 /****************************************************************************
 **设置按钮  （预留）
 **用户属性：
-       posX和posY就是x和y 为了令其在active状态下能够移动，定义了这两个属性
+       posX和posY就是x和y 为了方便在main.qml中直接更改设置其相对位置
 **信号：
-       shadowTrig()
-       用于Dropshadow连接，在相应的DropShadow的Connection中被使用
+       trigger()
+       用于与其它按钮间的相互作用，
+       例如：点击设置按钮，则其它按钮、界面及选项卡应处于关闭状态
+            点击其它按钮，设置按钮、界面及其选项卡应处于关闭状态
 ****************************************************************************/
 
 import QtQuick 2.0
@@ -15,7 +17,7 @@ Rectangle{
     x: posX; y: posY
     width: 50
     height:50
-    color: "ivory"
+    color: "transparent"
     opacity: 0.5
 
     // 定义这两个属性是因为我们要在该Btn激活的时候，让它的位置移动
@@ -33,7 +35,11 @@ Rectangle{
         },
         State {
             name:"active"
-            PropertyChanges {target: setButton;opacity:1; x: posX-3; y: posY-3}
+            PropertyChanges {target: setButton; opacity:1; x: posX-3; y: posY-3}
+        },
+        State {
+            name: ""
+            PropertyChanges {target: setButton; opacity:0.5}
         }
     ]
     Behavior on opacity { NumberAnimation{duration: 100; easing.type: Easing.Linear}}

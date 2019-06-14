@@ -3,13 +3,11 @@
 **此文件是GroundStation点开后产生的列表
 **在MyChart中使用
 
-**列表包括的四个按钮在Grid(menuContext)中
-**add: 单击该按钮：1.使得列表多一行空数据
+**列表包括三个按钮：
+**添加: 单击该按钮：1.使得列表多一行空数据，
                  2.向外发射信号 targetPointAppend()
-  nullptr: 预留按钮，opacity=0，故看不到
-  start: 单击该按钮：1.向外发射信号 start()
-  clear: 单击该按钮：1.向外发射信号 clear()
-
+  开始: 单击该按钮：1.向外发射信号 start()，开始连线
+  清理: 单击该按钮：1.向外发射信号 clear()，清理数据
 
 **类内信号:
         textInputChanged              在列表中改变值的时候产生

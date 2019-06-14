@@ -8,7 +8,7 @@ Rectangle{
     x: posX; y: posY
     width: 50
     height:50
-    color: "ivory"
+    color: "transparent" //"ivory"
     opacity: 0.5
     property real posX: 0
     property real posY: 0
@@ -26,6 +26,10 @@ Rectangle{
         State {
             name:"active"
             PropertyChanges {target: wlanButton;opacity:1; x: posX-3; y: posY-3}
+        },
+        State {
+            name: ""
+            PropertyChanges {target: wlanButton; opacity:0.5}
         }
     ]
     Behavior on opacity { NumberAnimation{duration: 100; easing.type: Easing.Linear}}

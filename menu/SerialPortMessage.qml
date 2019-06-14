@@ -19,18 +19,19 @@
 ****************************************************************************/
 
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import io.serialport 1.0
 
 Rectangle{
     id: serialportMessage
     width: 380; height: 200
-    color: "ivory"
-    border.color: "black"
+    color: Qt.rgba(255, 0, 0, .4)
+    border.color: Qt.rgba(255, 0, 0, .4)
     border.width: 2
     opacity: 0
     radius: 4
     x: -380
-    y: 10
+    y: 150
     property string commName
     property string buadRate
     property string dataBits
@@ -52,11 +53,11 @@ Rectangle{
     transitions: [
         Transition {
             from: "";  to: "active"; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 500; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         },
         Transition {
             from: "active"; to: ""; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 150; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         }
     ]
 
@@ -66,8 +67,8 @@ Rectangle{
         width: 80; height: 62
         anchors.top: parent.top; anchors.topMargin: 10
         anchors.left: parent.left; anchors.leftMargin: 10
-        color: "ivory"
-        border.color: "black"; border.width: 1.5
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: "white"; border.width: 1.5
         radius: 4
         Image{
             id: serialImg
@@ -77,6 +78,7 @@ Rectangle{
         Text {
             id: serialText
             text: imgName
+            color: "white"
             font.family: fontfamily
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.bottom; anchors.topMargin: 5
@@ -88,11 +90,11 @@ Rectangle{
         anchors.top: serialImgRect.top
         anchors.left: serialImgRect.right; anchors.leftMargin: 50
         spacing: 2
-        Text{text:"串 口: " + commName/*"Comm1"*/; color: "black"; font.family: fontfamily}
-        Text{text:"波特率: " + buadRate/*"9600"*/; color: "black"; font.family: fontfamily}
-        Text{text:"数据位: " + dataBits/*"Data8"*/; color: "black"; font.family: fontfamily}
-        Text{text:"停止位: " + stopBits/*"OneStop"*/; color: "black"; font.family: fontfamily}
-        Text{text:"校验位: " + parity/*"NoParity"*/; color: "black"; font.family: fontfamily}
+        Text{text:"串 口: " + commName/*"Comm1"*/; color: "white"; font.family: fontfamily}
+        Text{text:"波特率: " + buadRate/*"9600"*/; color: "white"; font.family: fontfamily}
+        Text{text:"数据位: " + dataBits/*"Data8"*/; color: "white"; font.family: fontfamily}
+        Text{text:"停止位: " + stopBits/*"OneStop"*/; color: "white"; font.family: fontfamily}
+        Text{text:"校验位: " + parity/*"NoParity"*/; color: "white"; font.family: fontfamily}
     }
 
     // 选项卡中的start/close按钮
@@ -133,11 +135,36 @@ Rectangle{
     // 选项卡中的文字框
     TextScreen{
         id: recvScreen
-        border.color: "black"
+        border.color: "white"
         x: 10; y:120
         Connections{
             target: comm
             onRecvMsgChanged: recvScreen.receive(comm.recvMsg)
         }
     }
+    Image {
+        id: name
+        width: 200; height: 200
+        source: "image/bian.png"
+        anchors.right: serialportMessage.right
+        anchors.rightMargin: -62
+        anchors.top: serialportMessage.top
+        opacity: 0.15
+    }
+
+    Glow {
+        anchors.fill: serialportMessage
+        radius: 7            //半径决定辉光的柔和度，半径越大辉光的边缘越模糊  样本值=1+半径*2
+        samples: 13           //每个像素采集的样本值，值越大，质量越好，渲染越慢
+        color: "#ddd"
+        source: Rectangle{
+            width: 380; height: 200
+            radius: 2
+            color: "transparent"
+            border.color: "white"
+        }
+        spread: 0.5         //在光源边缘附近增强辉光颜色的大部分
+        opacity: serialportMessage.opacity
+    }
+
 }

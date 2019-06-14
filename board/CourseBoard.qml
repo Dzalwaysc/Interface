@@ -7,8 +7,8 @@ import QtQuick.Extras.Private 1.0
 
 Rectangle {
     id:biao
-    width: 200
-    height: 200
+    width: 150
+    height: 150
     color: "transparent"
     property double currentValue: 0
     property string fontfamily: "Monaco"
@@ -20,22 +20,7 @@ Rectangle {
         anchors.centerIn: parent
         anchors.fill: parent
 
-        value: accelerating ? maximumValue : 0
-        property bool accelerating: false
-
-        Keys.onSpacePressed: accelerating = true
-        Keys.onReleased: {
-            if (event.key === Qt.Key_Space) {
-                 accelerating = false;
-                 event.accepted = true;
-             }
-        }
-
-        Component.onCompleted: forceActiveFocus()
-
-        Behavior on value {
-                 NumberAnimation {duration: 1000}
-             }
+        value: currentValue
 
         style: CircularGaugeStyle {
             id: style
@@ -95,13 +80,14 @@ Rectangle {
                 color: Qt.lighter("#06B9D1")
             }
         }
+
         Text {
             id: indexText
-            text:  "0.0"
+            text:  currentValue
             color: Qt.lighter("#06B9D1")
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: 40
+            anchors.horizontalCenterOffset: 30
             font.pixelSize: 12
             font.bold: true
             font.family: fontfamily

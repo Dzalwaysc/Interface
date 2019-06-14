@@ -1,20 +1,21 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import "../button"
 import io.udp 1.0
 
 Rectangle{
     id: wlanUDPMessage
     width: 380; height: 200
-    color: "ivory"
-    border.color: "black"
+    color: Qt.rgba(255, 0, 0, .4)
+    border.color: fontcolor
     border.width: 2
     opacity: 0
     radius: 4
     x: -380
-    y: 10
+    y: 150
 
     property string fontfamily: "Monaco"
-    property color fontcolor: "black"
+    property color fontcolor: "white"
 
 
     states:  State {
@@ -25,11 +26,11 @@ Rectangle{
     transitions: [
         Transition {
             from: "";  to: "active"; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 500; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         },
         Transition {
             from: "active"; to: ""; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 150; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         }
     ]
 
@@ -48,12 +49,12 @@ Rectangle{
         width: 100; height: 20
         anchors.left: parent.left; anchors.leftMargin: 10
         anchors.top: agreeName.bottom
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             text: "UDP"
@@ -78,12 +79,12 @@ Rectangle{
         width: 120; height: 20
         anchors.left: parent.left; anchors.leftMargin: 120
         anchors.top: localIPName.bottom
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             text: udp.localHostName
@@ -108,12 +109,12 @@ Rectangle{
         width: 100; height: 20
         anchors.top: localprName.bottom
         anchors.left: localprName.left
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             text: udp.localPort
@@ -138,12 +139,12 @@ Rectangle{
         width: 120; height: 20
         anchors.top: targgetIPName.bottom
         anchors.left: targgetIPName.left
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             text: udp.targetHostName
@@ -168,12 +169,12 @@ Rectangle{
         width: 100; height: 20
         anchors.top: targetprName.bottom
         anchors.left: targetprName.left
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             text: udp.targetPort
@@ -205,11 +206,11 @@ Rectangle{
         id:input
         width: 180; height: 25
         x:10; y:170
-        color: "white"
-        border.color: "black"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
-            color: "black"
+            color: fontcolor
             selectByMouse: true
             font.pixelSize: 13
             focus: true
@@ -230,7 +231,7 @@ Rectangle{
     // 状态栏
     Text{
         id: showName
-        x:245; y:110
+        x:245; y:105
         text: "未绑定... "
         color: fontcolor
         font.pixelSize: 13
@@ -240,8 +241,8 @@ Rectangle{
     // 开始关闭按钮
     ButtonOne{
         id: goButton
-        x: 245; y:135
-        btnWidth: 60; btnHeight: 20
+        x: 250; y: 125
+        btnWidth: 80; btnHeight: 30
         btnText: "连接"
         onClicked: {
             udp.bindSocket();
@@ -251,8 +252,8 @@ Rectangle{
 
     ButtonOne{
         id: downButton
-        x: 310; y:135
-        btnWidth: 60; btnHeight: 20
+        x: 250; y:165
+        btnWidth: 80; btnHeight: 30
         btnText: "断开连接"
         onClicked: {
             udp.closeSocket();
@@ -268,5 +269,30 @@ Rectangle{
         localPort: 8000
         targetPort: 8000
         response: "hello"
+    }
+
+    Image {
+        id: name
+        width: 200; height: 200
+        source: "image/bian.png"
+        anchors.right: wlanUDPMessage.right
+        anchors.rightMargin: -62
+        anchors.top: wlanUDPMessage.top
+        opacity: 0.15
+    }
+
+    Glow {
+        anchors.fill: wlanUDPMessage
+        radius: 7            //半径决定辉光的柔和度，半径越大辉光的边缘越模糊  样本值=1+半径*2
+        samples: 13           //每个像素采集的样本值，值越大，质量越好，渲染越慢
+        color: "#ddd"
+        source: Rectangle{
+            width: 380; height: 200
+            radius: 2
+            color: "transparent"
+            border.color: "white"
+        }
+        spread: 0.5         //在光源边缘附近增强辉光颜色的大部分
+        opacity: wlanUDPMessage.opacity
     }
 }

@@ -3,163 +3,143 @@ import QtQuick.Window 2.2
 import QtCharts 2.0
 import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
-import io.serialport 1.0
 import "menu"
 import "chart"
 import "parapad"
 import "board"
 import "background"
+import "button"
 
 Window {
     visible: true
     width: 1024
     height: 668
     title: qsTr("Hello World")
-    color: Qt.lighter("black")
+    color: Qt.hsla(230, 0.64, 0.06, 1) //"black" //'hsla(' + starsColor + ', 64%, 6%, 2)'
 
-//    StarBackground2{
-//        id: background
-//        anchors.centerIn: parent
-//    }
-
-    BeautifulNight{
+    /**************** 星空背景 ************************/
+    // 星星
+    StarBackground{
         anchors.centerIn: parent
     }
 
+    // 流星
+    MetorShower{
+        anchors.centerIn: parent
+    }
+
+    /**************** 菜单栏 ************************/
+    // 设置按钮
     SetButton{
         id: setBtn
-        posX: 550; posY: 10
+        posX: 100; posY: 30
         width: 30; height: 30
         onTrigger: {
-            // 针对setBtn的阴影
-            if(setBtn.state == "active") setBtn_shadow.state = "active";
-            else if(setBtn.state == "hover") setBtn_shadow.state = "";
+            // 针对set的列表
+            if(setBtn.state == "hover") setListView.listView.state = "";
+            else if(setBtn.state == "active") setListView.listView.state = "active";
+            setListView.close();
             // 针对serialport
-            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortBtn.state = "";
             serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对wlan
-            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanBtn.state = "";
             wlanListView.listView.state = ""; wlanListView.close();
             //针对parapad
             parapadbutton.state = ""; parapad.state = ""
         }
-    }
-
-    DropShadow{
-        id: setBtn_shadow
-        anchors.fill: setBtn
-        horizontalOffset: 3
-        verticalOffset: 3
-        radius: 8.0
-        samples: 17
-        color: "black"
-        opacity: 0
-        source: setBtn
-
-        states: State {
-            name: "active"
-            PropertyChanges {target: setBtn_shadow; opacity: 1}
+        BoxOne{
+            mW: 40; mH:20
+            opacity: parent.state === "hover" ? 1 : 0
+            anchors.left: parent.left; anchors.leftMargin: -3
+            anchors.bottom: parent.top
+            context: "设置"
         }
-        Behavior on opacity {NumberAnimation{duration: 100; easing.type: Easing.Linear}}
     }
 
+    // 串口按钮
     SerialPortButton{
         id: serialPortBtn
-        posX: 510; posY: 10
+        posX: 60; posY: 30
         width: 30; height: 30
         onTrigger: {
-            // 针对serialport的阴影
-            if(serialPortBtn.state == "active") serialPortBtn_shadow.state = "active";
-            else if(serialPortBtn.state == "hover") serialPortBtn_shadow.state = "";
             // 针对serialport的列表
             if(serialPortBtn.state === "hover") serialPortListView.listView.state = "";
             else if(serialPortBtn.state === "active") serialPortListView.listView.state = "active";
             serialPortListView.close();
-
             // 针对set
-            setBtn.state = ""; setBtn_shadow.state = "";
+            setBtn.state = "";
+            setListView.listView.state = "";   setListView.close()
             // 针对wlan
-            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanBtn.state = "";
             wlanListView.listView.state = ""; wlanListView.close();
-
             //针对parapad
             parapadbutton.state = ""; parapad.state = ""
         }
-    }
 
-    DropShadow{
-        id:serialPortBtn_shadow
-        anchors.fill: serialPortBtn
-        horizontalOffset: 3
-        verticalOffset: 3
-        radius: 8.0
-        samples: 17
-        color: "ivory"
-        opacity: 0
-        source: serialPortBtn
-
-        states: State {
-            name: "active"
-            PropertyChanges {target: serialPortBtn_shadow; opacity:1}
+        BoxOne{
+            mW: 40; mH:20
+            opacity: parent.state === "hover" ? 1 : 0
+            anchors.left: parent.left; anchors.leftMargin: -3
+            anchors.bottom: parent.top
+            context: "串口"
         }
-        Behavior on opacity {NumberAnimation{duration: 100; easing.type: Easing.Linear}}
     }
 
+    // 无线按钮
     WlanButton{
         id: wlanBtn
-        posX: 470; posY: 10
+        posX: 20; posY: 30
         width: 30; height: 30
         onTrigger: {
-            // 针对wlanBtn的阴影
-            if(wlanBtn.state == "active") wlanBtn_shadow.state = "active";
-            else if(wlanBtn.state == "hover") wlanBtn_shadow.state = "";
             // 针对wlan的列表
             if (wlanBtn.state === "hover") wlanListView.listView.state = ""
             else if (wlanBtn.state === "active") wlanListView.listView.state = "active"
             wlanListView.close();
-
             // 针对serialport
-            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortBtn.state = "";
             serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对set
-            setBtn.state = ""; setBtn_shadow.state = "";
+            setBtn.state = "";
+            setListView.listView.state = "";   setListView.close()
             //针对parapad
             parapadbutton.state = ""; parapad.state = ""
         }
-    }
-
-    DropShadow{
-        id: wlanBtn_shadow
-        anchors.fill: wlanBtn
-        horizontalOffset: 3
-        verticalOffset: 3
-        radius: 8.0
-        samples: 17
-        color: "black"
-        opacity: 0
-        source: wlanBtn
-
-        states: State {
-            name: "active"
-            PropertyChanges {target: wlanBtn_shadow; opacity: 1}
+        BoxOne{
+            mW: 40; mH:20
+            opacity: parent.state === "hover" ? 1 : 0
+            anchors.left: parent.left; anchors.leftMargin: -3
+            anchors.bottom: parent.top
+            context: "无线"
         }
-        Behavior on opacity {NumberAnimation{duration: 100; easing.type: Easing.Linear}}
     }
 
+    // 设置选项卡
+    SetListView{
+        id: setListView
+        posX: 100; posY: 65
+        delegate_width: 80
+        delegate_height: 30
+    }
+
+    // 串口选项卡
     SerialPortListView{
         id: serialPortListView
-        posX: 510; posY: -45
+        posX: 60; posY: 65
         delegate_width: 80
         delegate_height: 30
     }
 
+    // 无线选项卡
     WlanListView{
         id: wlanListView
-        posX: 470; posY: -45
+        posX: 20; posY: 65
         delegate_width: 80
         delegate_height: 30
     }
 
+    /**************** 随体坐标 ************************/
+    // 随体坐标图
     MyChart{
         id: myChart
         chart_width: 500
@@ -205,8 +185,26 @@ Window {
                 myChart.resetChartView();
             }
         }
+
+        // 创建与Simulation的信号连接
+        Connections{
+            target: setListView.simulationMessage
+            onUpdateSimulate: {
+                myChart.pathSeries.append(setListView.simulationMessage.actual_x,
+                                          setListView.simulationMessage.actual_y)
+            }
+            onChartPopup: {
+                myChart.state = "active"
+                chartbutton.state = "active"
+            }
+            onChartPopdown: {
+                myChart.state = ""
+                chartbutton.state = ""
+            }
+        }
     }
 
+    // 随体坐标图的拖拉按钮
     ChartButton{
         id: chartbutton
         posX: 1010; posY: 350
@@ -215,24 +213,34 @@ Window {
             else if(chartbutton.state == "hover") myChart.state = ""
 
             // 针对serialport
-            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortBtn.state = "";
             serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对wlan
-            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanBtn.state = "";
             wlanListView.listView.state = ""; wlanListView.close();
             //针对set
-            setBtn.state = ""; setBtn_shadow.state = "";
+        }
+
+        // 提示框
+        BoxOne{
+            mW: 100; mH:20
+            opacity: chartbutton.state === "hover" ? 1 : 0
+            anchors.right: parent.left
+            anchors.top: parent.top; anchors.topMargin: 20
+            isMirror: true
+            context: "随体坐标"
         }
     }
 
+    // 随体坐标图中的菜单栏
     ChartOperationBar{
         id: chartOperationBar
         opacity: 0
         rectheight: 20
         rectwidth: 20
         rectmargin: 2
-        anchors.right: myChart.right;   anchors.rightMargin: 25
-        anchors.top: myChart.top;   anchors.topMargin: 15
+        anchors.right: myChart.right;   anchors.rightMargin: 35
+        anchors.top: myChart.top;   anchors.topMargin: 20
 
         State {name: "active"; PropertyChanges {target: operationBar; opacity: 1.0}}
 
@@ -249,6 +257,7 @@ Window {
         }
     }
 
+    // 期望坐标点列表
     PointList{
         id: pointList
         x:-380;  y: 230
@@ -297,11 +306,30 @@ Window {
         }
     }
 
+    /**************** 艇体参数面板 ************************/
+    // 艇体参数面板
     ParaPad{
         id: parapad
         posX: 1025; posY: 20
+        north_X: setListView.simulationMessage.actual_x
+        east_Y: setListView.simulationMessage.actual_y
+        yaw: setListView.simulationMessage.actual_yaw
+
+        // 创建与Simulation的信号连接
+        Connections{
+            target: setListView.simulationMessage
+            onParaPopup: {
+                parapadbutton.state = "active"
+                parapad.state = "active"
+            }
+            onParaPopdown: {
+                parapadbutton.state = ""
+                parapad.state = ""
+            }
+        }
     }
 
+    // 艇体参数面板的拖拉按钮
     ParaPadButton{
         id: parapadbutton
         posX: 1010; posY: 20
@@ -310,31 +338,47 @@ Window {
             else if(parapadbutton.state == "hover") parapad.state = ""
 
             // 针对serialport
-            serialPortBtn.state = ""; serialPortBtn_shadow.state = "";
+            serialPortBtn.state = "";
             serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对wlan
-            wlanBtn.state = ""; wlanBtn_shadow.state = "";
+            wlanBtn.state = "";
             wlanListView.listView.state = ""; wlanListView.close();
             //针对set
-            setBtn.state = ""; setBtn_shadow.state = "";
         }
+
+        // 提示框
+        BoxOne{
+            mW: 100; mH:20
+            opacity: parapadbutton.state === "hover" ? 1 : 0
+            anchors.right: parent.left
+            anchors.top: parent.top; anchors.topMargin: 20
+            isMirror: true
+            context: "艇体参数面板"
+        }
+
     }
 
+    /**************** 仪表盘 ************************/
+    // 速度仪表盘
     VelocityBoard{
         id: dashBoard
         x: 20; y: 410
     }
 
+    // 航向仪表盘
     CourseBoard{
         id: courseboard
         x: 240; y: 410
+        currentValue: setListView.simulationMessage.actual_yaw
     }
 
-    WaveProgress2{
-        id: waveprogress
-        x: 40; y: 420
-    }
+    // 汽油仪表盘
+//    WaveProgress2{
+//        id: waveprogress
+//        x: 40; y: 420
+//    }
 
+    // 推力仪表盘
     ArcBoard{
         id: arcboard
 //        x: 100; y: 410
@@ -342,8 +386,9 @@ Window {
 
     }
 
-    MyCampass{
-        id: mycampass
-        x: 230; y: 410
-    }
+    // 指南针
+//    MyCampass{
+//        id: mycampass
+//        x: 230; y: 410
+//    }
 }

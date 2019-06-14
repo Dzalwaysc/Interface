@@ -1,18 +1,19 @@
 import QtQuick 2.0
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import "../button"
 import io.serialport 1.0
 
 Rectangle{
     id: serialportMessage
     width: 380; height: 200
-    color: "ivory"
-    border.color: "black"
+    color: Qt.rgba(255, 0, 0, .4)
+    border.color: Qt.rgba(255, 0, 0, .4)
     border.width: 2
     opacity: 0
     radius: 4
     x: -380
-    y: 10
+    y: 150
 
     // 串口信息
     property string commName: "COM10"
@@ -22,7 +23,7 @@ Rectangle{
     property string parity: "NoParity"
     //字体
     property string fontfamily: "Monaco"
-    property color fontcolor: "black"
+    property color fontcolor: "white"
 
     states:  State {
         name: "active"
@@ -32,11 +33,11 @@ Rectangle{
     transitions: [
         Transition {
             from: "";  to: "active"; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 500; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         },
         Transition {
             from: "active"; to: ""; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 150; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         }
     ]
 
@@ -45,12 +46,13 @@ Rectangle{
         id: comInfoName
         text: "北斗串口"
         font.family: fontfamily
+        color: fontcolor
         anchors.top: parent.top; anchors.topMargin: 5
         anchors.left: parent.left; anchors.leftMargin: 12
         font.pixelSize: 15
         Rectangle{
             width: 250; height: 1
-            color: "black"
+            color: fontcolor
             anchors.top: parent.bottom
             anchors.left: parent.left
         }
@@ -75,6 +77,7 @@ Rectangle{
         text: "未连接..."
         font.family: fontfamily
         font.pixelSize: 15
+        color: fontcolor
         anchors.top: comInfoName.top
         anchors.left: comInfoName.right; anchors.leftMargin: 200
     }
@@ -82,9 +85,9 @@ Rectangle{
     // 开始按钮
     ButtonOne{
         id: startBtn
-        btnWidth: 80; btnHeight: 20
+        btnWidth: 80; btnHeight: 30
         btnText: "打开串口"
-        anchors.top: comInfo.bottom; anchors.topMargin: 5
+        anchors.top: comInfo.bottom; anchors.topMargin: 20
         anchors.left: comInfo.left;
         onClicked: {
             comm.startSlave(comm.portName, comm.response);
@@ -95,10 +98,10 @@ Rectangle{
     // 关闭按钮
     ButtonOne{
         id: stopBtn
-        btnWidth: 80; btnHeight: 20
+        btnWidth: 80; btnHeight: 30
         btnText: "关闭串口"
-        anchors.top: startBtn.bottom; anchors.topMargin: 5
-        anchors.left: comInfo.left;
+        anchors.left: startBtn.right; anchors.leftMargin: 10
+        anchors.top: startBtn.top
         onClicked: {
             comm.closeSlave();
             comState.text = "未连接..."
@@ -110,12 +113,13 @@ Rectangle{
         id: recvName
         text: "串口接受数据:"
         font.family: fontfamily
+        color: fontcolor
         anchors.top: comInfoName.bottom; anchors.topMargin: 5
         anchors.left: parent.left; anchors.leftMargin: 150
     }
     TextScreen{
         id: recvScreen
-        border.color: "black"
+        border.color: fontcolor
         anchors.top: recvName.bottom; anchors.topMargin: 5
         anchors.left: recvName.left
         Connections{
@@ -127,14 +131,16 @@ Rectangle{
     // 发送框
     Rectangle{
         id: sendScreen
-        color: "ivory"
-        border.color: "black"
-        width: 185; height: 20
-        anchors.top: recvScreen.bottom; anchors.topMargin: 10
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: "white"
+        width: 185; height: 25
+        anchors.top: recvScreen.bottom; anchors.topMargin: 6
         anchors.left: recvScreen.left
         TextInput{
             id: sendText
-            anchors.left: parent.left; anchors.leftMargin: 2
+            anchors.left: parent.left; anchors.leftMargin: 10
+//            anchors.top: parent.top; anchors.topMargin: 2
+            anchors.verticalCenter: parent.verticalCenter
             color: fontcolor
             font.family: fontfamily
             selectedTextColor: "red"
@@ -148,7 +154,7 @@ Rectangle{
         id: sendBtn
         btnWidth: 30; btnHeight: 20
         btnText: "发送"
-        anchors.top: sendScreen.top;
+        anchors.verticalCenter: sendScreen.verticalCenter
         anchors.left: sendScreen.right; anchors.leftMargin: 5
         onClicked: comm.sendResponse();
     }
@@ -158,5 +164,30 @@ Rectangle{
         id: comm
         portName: commName
         response: sendText.text
+    }
+
+    Image {
+        id: name
+        width: 200; height: 200
+        source: "image/bian.png"
+        anchors.right: serialportMessage.right
+        anchors.rightMargin: -62
+        anchors.top: serialportMessage.top
+        opacity: 0.15
+    }
+
+    Glow {
+        anchors.fill: serialportMessage
+        radius: 7            //半径决定辉光的柔和度，半径越大辉光的边缘越模糊  样本值=1+半径*2
+        samples: 13           //每个像素采集的样本值，值越大，质量越好，渲染越慢
+        color: "#ddd"
+        source: Rectangle{
+            width: 380; height: 200
+            radius: 2
+            color: "transparent"
+            border.color: "white"
+        }
+        spread: 0.5         //在光源边缘附近增强辉光颜色的大部分
+        opacity: serialportMessage.opacity
     }
 }

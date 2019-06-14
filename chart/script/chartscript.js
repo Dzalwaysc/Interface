@@ -55,7 +55,7 @@ function groundstationAppend(newX, newY)
 
 function stateTransition(currentState)
 {
-    if(currentState === "" || currentState === "hovering") return "active";
+    if(currentState === "" || currentState === "hover") return "active";
     else return "";
 }
 

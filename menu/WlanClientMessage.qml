@@ -1,21 +1,22 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 import io.tcpclient 1.0
 import "../button"
 
 Rectangle{
     id: wlanClientMessage
     width: 380; height: 200
-    color: "ivory"
-    border.color: "black"
+    color: Qt.rgba(255, 0, 0, .4)
+    border.color: Qt.rgba(255, 0, 0, .4)
     border.width: 2
     opacity: 0
     radius: 4
     x: -380
-    y: 10
+    y: 150
 
     //字体
     property string fontfamily: "Monaco"
-    property color fontcolor: "black"
+    property color fontcolor: "white"
 
     // 在单击start按钮后，等待执行完onClicked的操作后发送该信号，对TCP/UDP进行操作，暴露给外部使用
     signal startTrigger()
@@ -31,11 +32,11 @@ Rectangle{
     transitions: [
         Transition {
             from: "";  to: "active"; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 500; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         },
         Transition {
             from: "active"; to: ""; reversible: false
-            NumberAnimation{properties: "opacity, x"; duration: 150; easing.type: Easing.Linear}
+            NumberAnimation{properties: "opacity, x"; duration: 100; easing.type: Easing.Linear}
         }
     ]
 
@@ -53,12 +54,12 @@ Rectangle{
         width: 125; height: 20
         anchors.left: parent.left; anchors.leftMargin: 10
         anchors.top: agreeName.bottom
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             text: "TCP client"
@@ -82,12 +83,12 @@ Rectangle{
         width: 125; height: 20
         anchors.left: parent.left; anchors.leftMargin: 10
         anchors.top: portName.bottom
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             font.family: fontfamily
@@ -115,12 +116,12 @@ Rectangle{
         width: 125; height: 20
         anchors.left: parent.left; anchors.leftMargin: 10
         anchors.top: addrName.bottom
-        color: "white"
-        border.color: "#a3a380"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             anchors.verticalCenter: parent.verticalCenter
             x:10
-            color: "black"
+            color: fontcolor
             font.pixelSize: 13
             focus: true
             font.family: fontfamily
@@ -135,7 +136,7 @@ Rectangle{
 
     Text{
         id: showName
-        anchors.top: addrInfo.bottom; anchors.topMargin: 5
+        anchors.top: addrInfo.bottom; anchors.topMargin: 15
         anchors.left: parent.left; anchors.leftMargin: 10
         text: "服务器断开... "
         color: fontcolor
@@ -145,8 +146,8 @@ Rectangle{
 
     ButtonOne{
         id: goButton
-        x:10; y:170
-        btnWidth: 60; btnHeight: 20
+        x:150; y:155
+        btnWidth: 80; btnHeight: 30
         btnText: "连接"
         onClicked: {
             showName.text = "服务器已连接..."
@@ -156,8 +157,8 @@ Rectangle{
 
     ButtonOne{
         id: downButton
-        x:75; y:170
-        btnWidth: 60; btnHeight: 20
+        x:250; y:155
+        btnWidth: 80; btnHeight: 30
         btnText: "断开连接"
         onClicked: {
             tcpClient.closeFortune();
@@ -177,19 +178,19 @@ Rectangle{
     // 选项卡中的文字框
     TextScreen{
         id: recvScreen
-        border.color: "black"
+        border.color: fontcolor
         x: 145; y:35
     }
 
     Rectangle{
         width: 185; height: 20
         x:145; y:125
-        color: "white"
-        border.color: "black"
+        color: Qt.rgba(255, 0, 0, .4)
+        border.color: fontcolor
         TextInput{
             id:input
             anchors.verticalCenter: parent.verticalCenter
-            color: "black"
+            color: fontcolor
             selectByMouse: true
             font.pixelSize: 13
             focus: true
@@ -209,5 +210,30 @@ Rectangle{
         id: tcpClient
         port: 8000
         hostName: "192.168.3.154"
+    }
+
+    Image {
+        id: name
+        width: 200; height: 200
+        source: "image/bian.png"
+        anchors.right: wlanClientMessage.right
+        anchors.rightMargin: -62
+        anchors.top: wlanClientMessage.top
+        opacity: 0.15
+    }
+
+    Glow {
+        anchors.fill: wlanClientMessage
+        radius: 7            //半径决定辉光的柔和度，半径越大辉光的边缘越模糊  样本值=1+半径*2
+        samples: 13           //每个像素采集的样本值，值越大，质量越好，渲染越慢
+        color: "#ddd"
+        source: Rectangle{
+            width: 380; height: 200
+            radius: 2
+            color: "transparent"
+            border.color: "white"
+        }
+        spread: 0.5         //在光源边缘附近增强辉光颜色的大部分
+        opacity: wlanClientMessage.opacity
     }
 }

@@ -13,8 +13,8 @@ import QtQuick 2.0
 
 Rectangle{
     id: btnOne
-    border.color: "black"
-    color: "ivory"
+    border.color: "white"
+    color: Qt.rgba(255, 0, 0, .4)
     width: btnWidth; height: btnHeight
     scale: 1
 
@@ -42,7 +42,7 @@ Rectangle{
         }
     }
 
-    Text{text: btnText; font.family: fontfamily; anchors.centerIn: parent}
+    Text{text: btnText; color: "white"; font.family: fontfamily; anchors.centerIn: parent}
 
     MouseArea{
         anchors.fill: parent

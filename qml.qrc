@@ -43,16 +43,19 @@
         <file>menu/SerialPortGPSMessage.qml</file>
         <file>board/CourseBoard.qml</file>
         <file>board/VelocityBoard.qml</file>
-        <file>parapad/ParaPadButton.qml</file>
         <file>board/WaveProgress2.qml</file>
-        <file>parapad/image/back.png</file>
-        <file>parapad/image/go.png</file>
         <file>board/ArcBoard.qml</file>
         <file>board/MyCampass.qml</file>
-        <file>background/StarBackground2.qml</file>
-        <file>chart/ChartButton.qml</file>
-        <file>chart/image/back.png</file>
-        <file>chart/image/go.png</file>
-        <file>background/BeautifulNight.qml</file>
+        <file>background/MetorShower.qml</file>
+        <file>background/StarBackground.qml</file>
+        <file>button/BoxOne.qml</file>
+        <file>button/image/boxOne.png</file>
+        <file>button/image/go.png</file>
+        <file>button/image/back.png</file>
+        <file>button/ChartButton.qml</file>
+        <file>button/ParaPadButton.qml</file>
+        <file>menu/SetListView.qml</file>
+        <file>menu/SetSimulationMessage.qml</file>
+        <file>menu/image/bian.png</file>
     </qresource>
 </RCC>

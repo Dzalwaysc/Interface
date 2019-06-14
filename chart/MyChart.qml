@@ -4,29 +4,39 @@
 **在main.cpp中所有的QGuiApplication必须替换为QApplication。
 **我们需要在.pro文件中添加：QT += widgets以使用Qapplication
 
+    1.zoom放大
 **使用鼠标单击并释放来选择要放大的区域
 **使用鼠标双击缩放重置
 **使用鼠标滚轮缩放
-**使用键滚动
-**旋转功能仅在工作中
-**--我们已经有了旋转属性
-**鼠标拖动
-**——还是想弄清楚
 
-**ChartView
+** 放大操作在is_zoom为true的时候开始
+** 绘制矩形在is_choice为true时开始
+** 放大处理函数, 过程:
+        1）.鼠标按下得到起始点originx、originy
+        2）.鼠标拖动绘制矩形
+        3）.鼠标放开，区域矩形消失，图像更新位置
+                  放大后矩形左上角x值为绘制矩形过程中初始点和终止点中最大的x点值
+                  放大后矩形左上角y值为绘制矩形过程中初始点和终止点中最大的y点值
+                  绘制的矩形宽为绘制矩形过程中初始点和终止点x差值的绝对值
+                  绘制的矩形高为绘制矩形过程中初始点和终止点y差值的绝对值
 
-**表格横纵坐标刻度线划分：min（主宽*12/1480，主高*12/960）
-**LineSeries   画一个简单折线图
-**ScatterSeries  接受散点图  LineSeries连起来
-**映射的x,y是中心点，因此我们需要让图片的中心点对准映射的xy，同时照片旋转的点是中心点，但是image的重心点在2/3Height处
-**zoom 十字架
-**drag 手
-**groundstation 手指尖
-**其他 箭头
-**zoomArea 点击zoom时在表格范围内定义的一个矩形框
-**Menu定义右击两种菜单
+    2.drag 拖动操作
+** 拖动操作在isDrag为true的时候开始
+** 每隔100ms 进行一次拖动操作       间隔时间通过dragTimer设置
+         拖动处理函数, 过程:
+             1）.首先鼠标按压下 -> 我们得到起始点  oX和oY
+             2）.然后鼠标移动 -> 我们得到终止点   cX和cY
+             3）.坐标轴移动距离即为  cX-oX 和 cY-oY
+                        为了让这个过程看起来更加流畅，这里对缩小移动距离，即乘上了0.8
+                        为了让这个过程不那么敏感，给定一个无效范围(-0.2, 0.2)
+             4）.结束一次拖动，将cX和cY赋值给oX和oY，即下一次拖动的原点为当前拖动的终止点
 
-chart进行zoom操作的时候，产生的矩形在zoomArea组件更改
+    3.图标
+        zoom 十字架
+        drag 手
+        groundstation 手指尖
+        其他 箭头
+        Menu定义右击两种菜单
 ****************************************************************************/
 
 import QtQuick 2.9
@@ -87,6 +97,7 @@ Item{
     signal mouseEnterChart()
     signal mouseExitChart()
 
+    // 用作右侧拉伸动画
     states: State {
         name: "active"
         PropertyChanges {target: myChart; x: posX-600}
@@ -171,16 +182,10 @@ Item{
             id: pathSeries
             axisX: axisX
             axisY: axisY
-            XYPoint { x: 0; y: 0 }
-            XYPoint { x: 1.1; y: 2.1 }
-            XYPoint { x: 1.9; y: 3.3 }
-            XYPoint { x: 2.1; y: 2.1 }
-            XYPoint { x: 2.9; y: 4.9 }
-            XYPoint { x: 3.4; y: 3.0 }
-            XYPoint { x: 4.1; y: 3.3 }
-            XYPoint { x: 10;  y: 10 }
         }
 
+
+        //  接受散点图
         ScatterSeries{
             id: targetPointSeries
             axisX: axisX; axisY: axisY
@@ -198,6 +203,7 @@ Item{
             }
         }
 
+        //  LineSeries连起来画一个简单折线图
         LineSeries{
             id: targetLineSeries
             axisXTop: axisXTop; axisYRight: axisYRight

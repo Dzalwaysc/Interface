@@ -1,11 +1,12 @@
+// 静态星云图
 import QtQuick 2.0
 
 Item {
     property int mW: 1024
-    property int mH: 668
+    property int mH: 688
 
     property int starsColor: 230    // 星星颜色(hsla的hue色调)
-    property int starsamount: 250  // 星星的数量
+    property int starsamount: 800  // 星星的数量
     property int starsradius: 3    // 星星半径比
     property int movrange: 2        // 星星移动范围（值越大范围越小）
     property int speed: 5000000       // 星星移动速度（值越大速度越慢）
@@ -20,7 +21,9 @@ Item {
             var ctx = getContext("2d");
             var stars = [];
 
-            // 如果max和min都为整数的话，随机范围 [min, max+1),其中err=max-min+1
+            // 如果max和min都为整数的话
+            // 随机过程: err = max-min+1 , k = random(0,1]
+            //          result = k * err + min;
             var random = function(min, max){
                 if(arguments.length < 2){
                     max = min;
@@ -45,9 +48,9 @@ Item {
 
             var Star = function() {
                 // 至画布中心的距离
-                this.orbitRadius = random(maxOrbit(mW, mH), 60);
+                this.orbitRadius = random(maxOrbit(mW, mH), 50);
                 // 星星的半径
-                this.radius = random(starsradius, 2);
+                this.radius = random(starsradius, starsradius);
 
                 this.orbitX = mW / 2;
                 this.orbitY = mH / 2;
@@ -70,9 +73,9 @@ Item {
                 // 星星闪烁
                 var twinkle = random(10);
                 if(twinkle === 1 && this.alpha>0){
-                    this.alpha -= 0.06;
+                    this.alpha -= 0.01;
                 }else if(twinkle === 2 && this.alpha<1){
-                    this.alpha += 0.06;
+                    this.alpha += 0.01;
                 }
                 ctx.globalAlpha = this.alpha;
                 // 在画布上画星星，参数(image, x, y, w, h)
@@ -84,16 +87,9 @@ Item {
             }
 
             function animation() {
-                ctx.globalCompositeOperation = 'source-over'
-                ctx.globalAlpha = trailing;
-                ctx.fillStyle = 'hsla(' + starsColor + ', 64%, 6%, 2)';
-                ctx.fillRect(0, 0, mW, mH);
-
-                ctx.globalCompositeOperation = 'lighter';
                 for(var i=1, l= stars.length; i<l; i++){
                     stars[i].draw();
                 }
-                requestAnimationFrame(animation);
              }
 
             animation();
@@ -109,10 +105,12 @@ Item {
             var ctx = getContext("2d");
             var half = star.width/2;
             var grd = ctx.createRadialGradient(half, half, 0, half, half, half);
+//            偏蓝色调
 //            grd.addColorStop(0.025, '#CCC');
 //            grd.addColorStop(0.1, 'hsl(' + starsColor + ', 61%, 33%)');
 //            grd.addColorStop(0.25, 'hsl(' + starsColor + ', 64%, 6%)');
 //            grd.addColorStop(1, 'transparent');
+            // 偏白色调
             grd.addColorStop(0.15, '#CCC');
             grd.addColorStop(0.5, 'hsl(230, 61%, 33%)');
             grd.addColorStop(0.6, 'hsl(230, 64%, 6%)');

@@ -1,11 +1,15 @@
 /*****************************************
 ** 用户属性：
-        单行列表的宽度和高度
-        delegata_width | tab_height
+   1.   单行列表的宽度和高度
+        delegata_width | delegate_height
         对象位置
-        listView.x | listView.y
+        listView.x | listView.y    用posX、posY暴露给外面，方便更改设置
+        调整该项对象的位置，需要调整listView中的x和y
+** 2.   设置4个串口按钮，分别为遥控，艇体，北斗，预留串口
 
-** 调整该项对象的位置，需要调整listView中的x和y
+** 内部属性：
+        close()信号
+        串口按钮关闭时，关闭所有选项卡
 
 ** 情况：
    一开始，listView的状态传递，是通过给serialport写一个状态，代码如下
@@ -37,7 +41,7 @@ Item{
 
     // 内置属性 highligth的透明度
     property real highligth_opacity: 1
-    Behavior on highligth_opacity{SpringAnimation { spring: 2; damping: 0.2 }}           //弹性动画
+    Behavior on highligth_opacity{SpringAnimation { spring: 2; damping: 0.2 }}    //弹性动画
 
     // 暴露给外部使用的属性
     property alias listView: listView
@@ -47,22 +51,28 @@ Item{
     onClose: {
         handleMessage.state = "";
         vehicleMessage.state = "";
+        gpsMessage.state = "";
+        emptyMessage2.state = ""
     }
 
     Rectangle{
         id: listView
-        x: posX; y: posY // 最终位置为x:650  y:45
+        x: posX; y: -45 // 最终位置为x:posX  y:posY
         opacity: 0
         width: delegate_width*4; height: delegate_height
         radius: 2
-        color: "ivory"
-        border.color: "black"
+        color: "transparent"
 
-        states:State {
+        states:[
+            State {
                 name: "active"
-                PropertyChanges {target: listView; opacity: 1; y: posY+90}
-                PropertyChanges {target: listView_shadow; opacity: 1}
-        }
+                PropertyChanges {target: listView; opacity: 1; y: posY}
+            },
+            State {
+                name: ""
+                PropertyChanges {target: listView; opacity: 0; y: -45}
+            }
+        ]
 
         ListModel{
             id: contactModel
@@ -80,8 +90,7 @@ Item{
                 Text {
                     id: contactInfo
                     anchors.centerIn: parent
-                    textFormat: Text.StyledText
-                    color: Qt.lighter("black")
+                    color: "white"
                     font.family: fontfamily
                     text: name
                 }
@@ -97,8 +106,6 @@ Item{
                 color: "lightsteelblue"
                 border.color: "black"
                 opacity: highligth_opacity
-                y:list.currentItem.y
-                Behavior on y { SpringAnimation{ spring: 3; damping: 0.2} }
             }
         }
 
@@ -119,7 +126,7 @@ Item{
             enabled: listView.opacity == 1
             hoverEnabled: true
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 0
             }
             onExited: {
@@ -134,7 +141,7 @@ Item{
             enabled: listView.opacity == 1
             hoverEnabled: true
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 1
             }
             onExited: {
@@ -149,7 +156,7 @@ Item{
             enabled: listView.opacity == 1
             hoverEnabled: true
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 2
             }
             onExited: {
@@ -164,7 +171,7 @@ Item{
             enabled: listView.opacity == 1
             hoverEnabled: true
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 3
             }
             onExited: {
@@ -177,16 +184,20 @@ Item{
         }
     }
 
-    DropShadow{
-        id: listView_shadow
+    Glow {
         anchors.fill: listView
-        horizontalOffset: 3
-        verticalOffset: 3
-        radius: 8
-        samples: 17
-        color: "black"
-        opacity: 0
-        source: listView
+        radius: 7            //半径决定辉光的柔和度，半径越大辉光的边缘越模糊  样本值=1+半径*2
+        samples: 13           //每个像素采集的样本值，值越大，质量越好，渲染越慢
+        color: "#ddd"
+        source: Rectangle{
+            width: delegate_width*4; height: delegate_height
+            radius: 2
+            color: "transparent"
+            border.color: "white"
+        }
+
+        spread: 0.5          //在光源边缘附近增强辉光颜色的大部分
+        opacity: 1
     }
 
     SerialPortHandleMessage{
@@ -199,7 +210,6 @@ Item{
                 emptyMessage2.state = "";
                 if(handleMessage.state === "") handleMessage.state = "active";
                 else if(handleMessage.state === "active") handleMessage.state = "";
-                //console.log(handleMessage.x); //配合anchors.right使用，用来获取x的位置
             }
         }
     }
@@ -241,7 +251,7 @@ Item{
             onClicked: {
                 handleMessage.state = "";
                 vehicleMessage.state = "";
-                emptyMessage1.state = "";
+                gpsMessage.state = "";
                 if(emptyMessage2.state === "") emptyMessage2.state = "active";
                 else if(emptyMessage2.state === "active") emptyMessage2.state = "";
             }

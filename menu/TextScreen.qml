@@ -33,9 +33,11 @@ import QtQuick 2.0
 Rectangle{
     id: textScreen
     x: 10; y:100
-//    width: rect_width; height: rect_height*(4+1)
     width: rect_width; height: rect_height*(4+1)
-    color: "steelblue"
+//    color: "steelblue"
+    color: Qt.rgba(0, 245, 255, .35)
+    border.color: "red"
+
 
     // 用户接口
     function receive(Input)
@@ -75,7 +77,7 @@ Rectangle{
         id: rect0
         y: 60
         width: rect_width; height: rect_height
-        color: "steelblue"
+        color: Qt.rgba(0, 245, 255, .05)
         state: "level0"
         states: [
             State {
@@ -112,7 +114,7 @@ Rectangle{
         id: rect1
         y: 40
         width: rect_width; height: rect_height
-        color: "steelblue"
+        color: Qt.rgba(0, 245, 255, .05)
         state: "level1"
         states: [
             State {
@@ -149,7 +151,7 @@ Rectangle{
         id: rect2
         y: 20
         width: rect_width; height: rect_height
-        color: "steelblue"
+        color: Qt.rgba(0, 245, 255, .05)
         state: "level2"
         states: [
             State {
@@ -185,7 +187,7 @@ Rectangle{
         id: rect3
         y: 0
         width: rect_width; height: rect_height
-        color: "steelblue"
+        color: Qt.rgba(0, 245, 255, .05)
         state: "level3"
         states: [
             State {

@@ -13,8 +13,8 @@ import QtQuick.Extras.Private 1.0
 
 Rectangle {
     id:biao
-    width: 200
-    height: 200
+    width: 150
+    height: 150
     color: "transparent"
     property double currentValue: 0
     property string fontfamily: "Monaco"
@@ -113,7 +113,7 @@ Rectangle {
     CircularGauge{
         id: small
 
-        width: 200; height: 200
+        width: biao.width; height: biao.height
         value: accelerating ? maximumValue : 0
         property bool accelerating: false
 
@@ -136,13 +136,13 @@ Rectangle {
 
         style: CircularGaugeStyle {
 
-            maximumValueAngle: 215
-            minimumValueAngle: 145
+            maximumValueAngle: 240
+            minimumValueAngle: 120
 
             needle: Rectangle {
                 y: outerRadius * 0.1
                 implicitWidth: outerRadius * 0.03
-                implicitHeight: outerRadius * 0.7
+                implicitHeight: outerRadius * 0.6
                 antialiasing: true
                 color:"#7CFC00"// Qt.lighter("#00FF80")
             }
@@ -199,9 +199,8 @@ Rectangle {
         color: Qt.lighter("#06B9D1")
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 40
+        anchors.horizontalCenterOffset: 30
         font.pixelSize: 12
-        font.bold: true
         font.family: fontfamily
     }
 

@@ -20,7 +20,8 @@ SOURCES += \
     clientthread.cpp \
     fortuneserver.cpp \
     fortunethread.cpp \
-    udpclass.cpp
+    udpclass.cpp \
+    simulation.cpp
 
 RESOURCES += qml.qrc
 
@@ -40,4 +41,5 @@ HEADERS += \
     clientthread.h \
     fortuneserver.h \
     fortunethread.h \
-    udpclass.h
+    udpclass.h \
+    simulation.h

@@ -29,24 +29,29 @@ Item {
 
     Rectangle{
         id: listView
-        x: posX; y: posY // 最终位置为x:650  y:45
+        x: posX; y: -45 // 最终位置为x:posX  y:posY
         opacity: 1
         width: delegate_width*4; height: delegate_height
         radius: 2
-        color: "ivory"
-        border.color: "black"
+        color: "transparent"
+        border.color: "white"
 
-        states:State {
+        states:[
+            State {
                 name: "active"
-                PropertyChanges {target: listView; opacity: 1; y: posY+90}
-                PropertyChanges {target: listView_shadow; opacity: 1}
-        }
+                PropertyChanges {target: listView; opacity: 1; y: posY}
+            },
+            State {
+                name: ""
+                PropertyChanges {target: listView; opacity: 0; y: -45}
+            }
+        ]
 
         ListModel{
             id: contactModel
-            ListElement{name: "Server"}
-            ListElement{name: "Client"}
-            ListElement{name: "UDP"}
+            ListElement{name: "服务器"}
+            ListElement{name: "客户端"}
+            ListElement{name: "数据报"}
             ListElement{name: "预留网络"}
         }
 
@@ -58,8 +63,7 @@ Item {
                 Text {
                     id: contactInfo
                     anchors.centerIn: parent
-                    textFormat: Text.StyledText
-                    color: Qt.lighter("black")
+                    color: "white"
                     text: name
                     font.family: fontfamily
                 }
@@ -75,8 +79,6 @@ Item {
                 color: "lightsteelblue"
                 border.color: "black"
                 opacity: highligth_opacity
-                y:list.currentItem.y
-                Behavior on y { SpringAnimation{ spring: 3; damping: 0.2} }
             }
         }
 
@@ -97,7 +99,7 @@ Item {
             enabled: listView.opacity == 1
             hoverEnabled: listView.opacity == 1
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 0
             }
             onExited: {
@@ -112,7 +114,7 @@ Item {
             enabled: listView.opacity == 1
             hoverEnabled: listView.opacity == 1
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 1
             }
             onExited: {
@@ -127,7 +129,7 @@ Item {
             enabled: listView.opacity == 1
             hoverEnabled: listView.opacity == 1
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 2
             }
             onExited: {
@@ -142,7 +144,7 @@ Item {
             enabled: listView.opacity == 1
             hoverEnabled: listView.opacity == 1
             onEntered: {
-                highligth_opacity = 1
+                highligth_opacity = 0.5
                 list.currentIndex = 3
             }
             onExited: {
@@ -155,18 +157,21 @@ Item {
         }
     }
 
-    DropShadow{
-        id: listView_shadow
+    Glow {
         anchors.fill: listView
-        horizontalOffset: 3
-        verticalOffset: 3
-        radius: 8
-        samples: 17
-        color: "black"
-        opacity: 0
-        source: listView
-    }
+        radius: 7            //半径决定辉光的柔和度，半径越大辉光的边缘越模糊  样本值=1+半径*2
+        samples: 13           //每个像素采集的样本值，值越大，质量越好，渲染越慢
+        color: "#ddd"
+        source: Rectangle{
+            width: delegate_width*4; height: delegate_height
+            radius: 2
+            color: "transparent"
+            border.color: "white"
+        }
 
+        spread: 0.5          //在光源边缘附近增强辉光颜色的大部分
+        opacity: 1
+    }
 
     WlanServerMessage{
         id: serverMessage
