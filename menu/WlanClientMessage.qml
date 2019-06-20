@@ -12,7 +12,7 @@ Rectangle{
     opacity: 0
     radius: 4
     x: -380
-    y: 150
+    y: 230
 
     //字体
     property string fontfamily: "Monaco"
@@ -26,7 +26,7 @@ Rectangle{
 
     states:  State {
         name: "active"
-        PropertyChanges {target: wlanClientMessage; opacity: 1; x: -2}
+        PropertyChanges {target: wlanClientMessage; opacity: 1; x: 4}
     }
 
     transitions: [

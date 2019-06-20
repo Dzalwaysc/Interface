@@ -126,22 +126,22 @@ Item{
         anchors.centerIn: parent
         antialiasing: true       //是否抗锯齿
         legend.visible: false
-        //backgroundColor: "black"
-        theme:ChartView.ChartThemeHighContrast
+        backgroundColor: Qt.rgba(0, 22, 255, 0.1)
+//        theme:ChartView.ChartThemeHighContrast
 
         // margin between chart rectangle and the plot area
 //        margins.top: 0
-//        margins.left: 0
-//        margins.bottom: 0
-//        margins.right: 0
+        margins.left: 1
+        margins.bottom: 0
+        margins.right: 0
 
         ValueAxis{
             id: axisX
             min: axisX_min
             max: axisX_max
-            lineVisible: true
+            lineVisible: false
             labelsVisible: true
-            gridVisible: false
+            gridVisible: true
             labelsColor: "red"
             labelsFont.family: fontfamily
         }
@@ -150,7 +150,7 @@ Item{
             id: axisXTop
             min: axisX_min
             max: axisX_max
-            lineVisible: true
+            lineVisible: false
             labelsVisible: false
             gridVisible: false
             labelsFont.family: fontfamily
@@ -160,9 +160,9 @@ Item{
             id: axisY
             min: axisY_min
             max: axisY_max
-            lineVisible: true
+            lineVisible: false
             labelsVisible: true
-            gridVisible: false
+            gridVisible: true
             labelsColor: "red"
             labelsFont.family: fontfamily
         }
@@ -171,7 +171,7 @@ Item{
             id: axisYRight
             min: axisY_min
             max: axisY_max
-            lineVisible: true
+            lineVisible: false
             labelsVisible: false
             gridVisible: false
             labelsColor: "red"
@@ -182,6 +182,7 @@ Item{
             id: pathSeries
             axisX: axisX
             axisY: axisY
+            useOpenGL: true // 使chart再增加点的时候更加流畅
         }
 
 

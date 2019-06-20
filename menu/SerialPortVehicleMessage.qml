@@ -12,7 +12,7 @@ Rectangle{
     opacity: 0
     radius: 4
     x: -380
-    y: 150
+    y: 230
 
     // 串口信息
     property string commName: "COM18"
@@ -26,7 +26,7 @@ Rectangle{
 
     states:  State {
         name: "active"
-        PropertyChanges {target: serialportMessage; opacity: 1; x: -2}
+        PropertyChanges {target: serialportMessage; opacity: 1; x: 2}
     }
 
     transitions: [

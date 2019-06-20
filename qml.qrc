@@ -44,10 +44,7 @@
         <file>board/CourseBoard.qml</file>
         <file>board/VelocityBoard.qml</file>
         <file>board/WaveProgress2.qml</file>
-        <file>board/ArcBoard.qml</file>
-        <file>board/MyCampass.qml</file>
         <file>background/MetorShower.qml</file>
-        <file>background/StarBackground.qml</file>
         <file>button/BoxOne.qml</file>
         <file>button/image/boxOne.png</file>
         <file>button/image/go.png</file>
@@ -57,5 +54,16 @@
         <file>menu/SetListView.qml</file>
         <file>menu/SetSimulationMessage.qml</file>
         <file>menu/image/bian.png</file>
+        <file>board/image/circle.png</file>
+        <file>board/image/needle.png</file>
+        <file>board/image/outerCircle.png</file>
+        <file>board/image/circle2.png</file>
+        <file>board/image/outerCircle2.png</file>
+        <file>background/image/frame.png</file>
+        <file>board/CourseRateBoard.qml</file>
+        <file>board/image/circle3.png</file>
+        <file>board/image/outerCircle3.png</file>
+        <file>board/Bar.qml</file>
+        <file>board/My3DBar.qml</file>
     </qresource>
 </RCC>

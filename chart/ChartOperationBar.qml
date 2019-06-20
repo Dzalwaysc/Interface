@@ -29,14 +29,15 @@ chart的控制按钮文档，主结构为Rectangle
 ****************************************************************************/
 
 import QtQuick 2.0
+import "../button"
 import "script/chartscript.js" as Script
 
 Rectangle{
     id: operationBar
     width: rectwidth*4 + 10*3
     height: rectheight
-    color: "white"
-    border.color: "white"
+    color: "transparent"
+    //border.color: "white"
 
     property string fontfamily: "Monaco"
 
@@ -58,14 +59,15 @@ Rectangle{
 
     Item {
         anchors.fill: parent
+
         Rectangle{
             id: resetRect
             width: rectwidth
             height: rectheight
-            color: "white"
+            color: "transparent"
             anchors.top: parent.top
             anchors.left: parent.left
-            opacity: 0.65
+            opacity: 0.3
             Image {
                 id: reset
                 anchors.centerIn: parent
@@ -81,7 +83,7 @@ Rectangle{
                 },
                 State {
                     name: ""
-                    PropertyChanges {target: groundstationRect; opacity: 0.65}
+                    PropertyChanges {target: groundstationRect; opacity: 0.3}
                     PropertyChanges {target: introduction_groundstation; opacity: 0.0}
                 }
             ]
@@ -111,21 +113,13 @@ Rectangle{
                 }
             }
 
-            Rectangle{
-                id:introduction_reset
-                border.color: "black"; radius: 2
-                width: 40; height: rectheight
+            BoxOne{
+                id: introduction_reset
                 opacity: 0
-                y: -40
-                Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
+                mW:40; mH:20
+                y: -30
                 anchors.horizontalCenter: resetRect.horizontalCenter
-                Text{
-                    text: "刷新"
-                    color: "black"
-                    anchors.centerIn: parent
-                    font.family: fontfamily
-                    font.bold: true
-                }
+                context: "刷新"
             }
         }
 
@@ -133,10 +127,10 @@ Rectangle{
             id: zoomRect
             width: rectwidth
             height: rectheight
-            color: "white"
+            color: "transparent"
             anchors.top: parent.top
-            anchors.left: resetRect.right; anchors.leftMargin: 15
-            opacity: 0.65
+            anchors.left: resetRect.right; anchors.leftMargin: 10
+            opacity: 0.3
             Image {
                 id: zoom
                 anchors.fill: parent
@@ -147,7 +141,7 @@ Rectangle{
                 State {
                     name: "active"
                     PropertyChanges {target: zoomRect; opacity: 1.0}
-                    PropertyChanges {target: introduction_zoom; opacity: 1.0; color: "#ff1493"; y: -40}
+                    PropertyChanges {target: introduction_zoom; opacity: 0.0}
                 },
                 State {
                     name: "hover"
@@ -156,7 +150,7 @@ Rectangle{
                 },
                 State {
                     name: ""
-                    PropertyChanges {target: zoomRect; opacity: 0.65}
+                    PropertyChanges {target: zoomRect; opacity: 0.3}
                     PropertyChanges {target: introduction_zoom; opacity: 0.0}
                 }
             ]
@@ -181,21 +175,13 @@ Rectangle{
                 }
             }
 
-            Rectangle{
-                id:introduction_zoom
-                border.color: "black"; radius: 2
-                width: 40; height: rectheight
+            BoxOne{
+                id: introduction_zoom
                 opacity: 0
-                y: -40
-                Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
+                mW:40; mH:20
+                y: -30
                 anchors.horizontalCenter: zoomRect.horizontalCenter
-                Text{
-                    text: "放大"
-                    color: "black"
-                    anchors.centerIn: parent
-                    font.family: fontfamily
-                    font.bold: true
-                }
+                context: "放大"
             }
         }
 
@@ -203,10 +189,10 @@ Rectangle{
             id: dragRect
             width: rectwidth
             height: rectheight
-            color: "white"
+            color: "transparent"
             anchors.top: parent.top
-            anchors.left: zoomRect.right; anchors.leftMargin: 15
-            opacity: 0.65
+            anchors.left: zoomRect.right; anchors.leftMargin: 10
+            opacity: 0.3
             Image {
                 id: drag
                 anchors.fill: parent
@@ -217,7 +203,7 @@ Rectangle{
                 State {
                     name: "active"
                     PropertyChanges {target: dragRect; opacity: 1.0}
-                    PropertyChanges {target: introduction_drag; opacity: 1.0; color: "#ff1493"; y: -40}
+                    PropertyChanges {target: introduction_drag; opacity: 0.0}
                 },
                 State {
                     name: "hover"
@@ -226,7 +212,7 @@ Rectangle{
                 },
                 State {
                     name: ""
-                    PropertyChanges {target: dragRect; opacity: 0.65}
+                    PropertyChanges {target: dragRect; opacity: 0.3}
                     PropertyChanges {target: introduction_drag; opacity: 0.0}
                 }
             ]
@@ -251,21 +237,14 @@ Rectangle{
                 }
             }
 
-            Rectangle{
+            BoxOne{
                 id: introduction_drag
-                border.color: "black"; radius: 2
-                width: 40; height: rectheight
                 opacity: 0
-                y: -40
-                Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
+                mW:40; mH:20
+                y: -30
                 anchors.horizontalCenter: dragRect.horizontalCenter
-                Text{
-                    text: "拖拽"
-                    color: "black"
-                    anchors.centerIn: parent
-                    font.family: fontfamily
-                    font.bold: true
-                }
+                context: "拖拽"
+
             }
         }
 
@@ -273,10 +252,10 @@ Rectangle{
             id: groundstationRect
             width: rectwidth
             height: rectheight
-            color: "white"
+            color: "transparent"
             anchors.top: parent.top
-            anchors.left: dragRect.right; anchors.leftMargin: 15
-            opacity: 0.65
+            anchors.left: dragRect.right; anchors.leftMargin: 10
+            opacity: 0.3
             Image {
                 id: groundstation
                 anchors.centerIn: parent
@@ -288,7 +267,7 @@ Rectangle{
                 State {
                     name: "active"
                     PropertyChanges {target: groundstationRect; opacity: 1.0}
-                    PropertyChanges {target: introduction_groundstation; opacity: 1.0; color: "#ff1493"; y: -40}
+                    PropertyChanges {target: introduction_groundstation; opacity: 0.0}
                 },
                 State {
                     name: "hover"
@@ -297,7 +276,7 @@ Rectangle{
                 },
                 State {
                     name: ""
-                    PropertyChanges {target: groundstationRect; opacity: 0.65}
+                    PropertyChanges {target: groundstationRect; opacity: 0.3}
                     PropertyChanges {target: introduction_groundstation; opacity: 0.0}
                 }
             ]
@@ -322,21 +301,13 @@ Rectangle{
                 }
             }
 
-            Rectangle{
+            BoxOne{
                 id: introduction_groundstation
-                border.color: "black"; radius: 2
-                width: 40; height: rectheight
                 opacity: 0
-                y: -40
-                Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
+                mW:45; mH:20
+                y: -30
                 anchors.horizontalCenter: groundstationRect.horizontalCenter
-                Text{
-                    text: "地面站"
-                    color: "black"
-                    anchors.centerIn: parent
-                    font.family: fontfamily
-                    font.bold: true
-                }
+                context: "地面站"
             }
         }
     }

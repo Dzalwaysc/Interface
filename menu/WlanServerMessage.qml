@@ -7,11 +7,11 @@ Rectangle{
     width: 380; height: 200
     color: Qt.rgba(255, 0, 0, .4)
     border.color: fontcolor
-    border.width: 2
+    border.width: 1
     opacity: 0
     radius: 4
     x: -380
-    y: 150
+    y: 230
 
     property string fontfamily: "Monaco"
     property color fontcolor: "white"
@@ -19,7 +19,7 @@ Rectangle{
 
     states:  State {
         name: "active"
-        PropertyChanges {target: wlanServerMessage; opacity: 1; x: -2}
+        PropertyChanges {target: wlanServerMessage; opacity: 1; x: 4}
     }
 
     transitions: [

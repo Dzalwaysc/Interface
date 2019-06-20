@@ -1,6 +1,7 @@
 QT += quick
 QT += widgets
 QT += serialport
+QT += 3dcore 3drender 3dinput 3dquick 3dlogic qml 3dquickextras 3dextras
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -21,7 +22,8 @@ SOURCES += \
     fortuneserver.cpp \
     fortunethread.cpp \
     udpclass.cpp \
-    simulation.cpp
+    simulation.cpp \
+    simulationthread.cpp
 
 RESOURCES += qml.qrc
 
@@ -42,4 +44,5 @@ HEADERS += \
     fortuneserver.h \
     fortunethread.h \
     udpclass.h \
-    simulation.h
+    simulation.h \
+    simulationthread.h

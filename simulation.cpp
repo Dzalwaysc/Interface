@@ -3,53 +3,22 @@
 Simulation::Simulation(QObject *parent) :
     QObject (parent)
 {
-    m_actualX = 0;
-    m_actualY = 0;
-    m_actualYaw = 0;
+    m_data.resize(6);
     m_txtlist.clear();
-    timer = new QTimer(this);
-
-    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    readTxtData();
 }
 
-float Simulation::actualX()
+Simulation::~Simulation()
 {
-    return m_actualX;
-}
-
-float Simulation::actualY()
-{
-    return m_actualY;
-}
-
-float Simulation::actualYaw()
-{
-    return m_actualYaw;
-}
-
-void Simulation::setActualX(float actualX)
-{
-    m_actualX = actualX;
-    emit actualXChanged();
-}
-
-void Simulation::setActualY(float actualY)
-{
-    m_actualY = actualY;
-    emit actualYChanged();
-}
-
-void Simulation::setActualYaw(float actualYaw)
-{
-    m_actualYaw = actualYaw;
-    emit actualYawChanged();
+    m_timer->stop();
+    qDebug()<<"simulation is finished";
 
 }
 
 void Simulation::readTxtData()
 {
     QFile file("C:/Users/Administrator/Desktop/out.txt");
-//    QFile file("/Users/oliver/C++Projects/3Ddemo/out.txt");
+    //QFile file("/Users/oliver/C++Projects/Interface/out.txt");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         return;
     }
@@ -61,27 +30,35 @@ void Simulation::readTxtData()
     file.close();
 }
 
-void Simulation::runTest()
+void Simulation::onSimulationRun()
 {
-    if(m_txtlist.isEmpty())
-        readTxtData();
-
-    timer->start(50);
+    m_timer = new QTimer(this);
+    m_timer->start(50);
+    connect(m_timer, &QTimer::timeout, this, &Simulation::onTimeout);
 }
 
-void Simulation::stopTest()
+void Simulation::onSimulationStop()
 {
-    if(timer != nullptr)
-        timer->stop();
+    m_timer->stop();
 }
 
-void Simulation::update()
+void Simulation::onSimulationReset()
+{
+    m_timer->stop();
+    m_txtlist.clear();
+    readTxtData();
+}
+
+void Simulation::onTimeout()
 {
     if(!m_txtlist.isEmpty()){
-        setActualX(m_txtlist[0].split('\t')[0].toFloat());
-        setActualY(m_txtlist[0].split('\t')[1].toFloat());
-        setActualYaw(m_txtlist[0].split('\t')[2].toFloat());
-        emit updateGo();
+        m_data[0] = m_txtlist[0].split('\t')[0].toDouble();
+        m_data[1] = m_txtlist[0].split('\t')[1].toDouble();
+        m_data[2] = m_txtlist[0].split('\t')[2].toDouble();
+        m_data[3] = m_txtlist[0].split('\t')[3].toDouble() * 2;
+        m_data[4] = m_txtlist[0].split('\t')[4].toDouble();
+        m_data[5] = m_txtlist[0].split('\t')[5].toDouble();
         m_txtlist.pop_front();
+        emit dataUpdate(m_data);
     }
 }

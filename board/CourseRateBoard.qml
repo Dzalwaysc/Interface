@@ -9,31 +9,31 @@ CircularGauge {
     id: velocityBoard
     width: 120
     height: 120
-    property double currentValue: 30
+    property double currentValue: 1.3
     property string fontfamily: "Monaco"
 
     // 表盘上显示的最大值/最小值
-    maximumValue: 180
-    minimumValue: -180
+    maximumValue: 5
+    minimumValue: -5
 
     // 当前值
     value:  currentValue
 
     style: CircularGaugeStyle {
         // 表盘刻度最小值/最大值，12点方向向右是正值
-        maximumValueAngle: 180
-        minimumValueAngle: -180
+        maximumValueAngle: 130
+        minimumValueAngle: 310
 
         labelInset:-6   // 表盘文本到中心的距离
-        labelStepSize: 30 // 表盘文本的步长
+        labelStepSize: 1 // 表盘文本的步长
 
         // 大刻度设置
-        tickmarkStepSize: 30 // 大刻度的步长
+        tickmarkStepSize: 1 // 大刻度的步长
         tickmarkInset: 6    // 大刻度到中心的距离
 
         // 小刻度设置
         minorTickmarkInset: 6
-        minorTickmarkCount: 5
+        minorTickmarkCount: 4
 
         // 表盘的指针
         needle:Item{
@@ -52,7 +52,7 @@ CircularGauge {
                 width: outerRadius * 1.0
                 height: outerRadius * 1.0
                 anchors.centerIn: parent
-                source: "image/circle2.png"
+                source: "image/circle3.png"
             }
             Text{
                 text: currentValue.toFixed(1)
@@ -82,7 +82,7 @@ CircularGauge {
             implicitHeight: outerRadius * 0.05
             radius: implicitWidth / 2
             antialiasing: true
-            color: Qt.lighter("#49A45C")
+            color: "#EFAC51"
         }
 
         // 表盘背景
@@ -91,7 +91,7 @@ CircularGauge {
             // 外圆环
             Image{
                 anchors.fill: parent
-                source: "image/outerCircle2.png"
+                source: "image/outerCircle3.png"
             }
 
             // 内围能量条
@@ -108,18 +108,13 @@ CircularGauge {
                     // 内围能量条
                     var drawInterCirc = function(){
                         ctx.beginPath();
-                        if(Math.abs(currentValue) > 90){
-                            ctx.strokeStyle = "#F7EF51";
-                        }else{
-                            ctx.strokeStyle = "#9CFD6E";
-                        }
-                        //ctx.strokeStyle = "#33FFFC" //"#06B9D1";
+                        ctx.strokeStyle = "#FFB95B";
                         ctx.lineWidth = 15;
                         // 为了对齐仪表盘控件的坐标，角度还要减去90度
                         if(currentValue >= 0){
-                            ctx.arc(oX, oY, oR, initAngle - Math.PI/2, currentAngle  - Math.PI/2, false);
-                        }else if(currentValue < 0){
                             ctx.arc(oX, oY, oR, initAngle - Math.PI/2, currentAngle  - Math.PI/2, true);
+                        }else if(currentValue < 0){
+                            ctx.arc(oX, oY, oR, initAngle - Math.PI/2, currentAngle  - Math.PI/2, false);
                         }
 
                         ctx.stroke();

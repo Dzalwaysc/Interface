@@ -31,7 +31,7 @@ Rectangle{
     opacity: 0
     radius: 4
     x: -380
-    y: 150
+    y: 230
     property string commName
     property string buadRate
     property string dataBits

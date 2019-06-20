@@ -21,6 +21,9 @@ Rectangle{
     property double north_X
     property double east_Y
     property double yaw
+    property double u
+    property double v
+    property double r
 
     states: State {
         name: "active"
@@ -77,7 +80,7 @@ Rectangle{
             width: 125; height: 20
             color: "transparent"
             Label{
-                text:"纵荡速度u: " + "4.5" + "m/s"
+                text:"纵荡速度u: " + u.toString() + "m/s"
                 clip: true
                 font.pixelSize: fontsize
                 font.family: fontfamily
@@ -101,7 +104,7 @@ Rectangle{
             width: 125; height: 20
             color: "transparent"
             Label{
-                text:"横荡速度v: " + "0.2" + "m/s"
+                text:"横荡速度v: " + v.toString() + "m/s"
                 clip: true
                 font.pixelSize: fontsize
                 font.family: fontfamily
@@ -125,7 +128,7 @@ Rectangle{
             width: 125; height: 20
             color: "transparent"
             Label{
-                text:"艏摇速度r: " + "0.1" + "°/s"
+                text:"艏摇速度r: " + r.toString() + "°/s"
                 clip: true
                 font.pixelSize: fontsize
                 font.family: fontfamily

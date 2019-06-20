@@ -15,12 +15,16 @@ Window {
     width: 1024
     height: 668
     title: qsTr("Hello World")
-    color: Qt.hsla(230, 0.64, 0.06, 1) //"black" //'hsla(' + starsColor + ', 64%, 6%, 2)'
+    color: Qt.hsla(230, 0.64, 0.06, 1)
 
     /**************** 星空背景 ************************/
-    // 星星
-    StarBackground{
+    // 星星和仪表盘框架  使用图片是因为这样加载更快
+    // 该图片制造在Qt技术储备 -> 仪表盘 -> 完整仪表盘
+    Image{
+        z: -1
         anchors.centerIn: parent
+        anchors.fill: parent
+        source: "background/image/frame.png"
     }
 
     // 流星
@@ -32,7 +36,7 @@ Window {
     // 设置按钮
     SetButton{
         id: setBtn
-        posX: 100; posY: 30
+        posX: 240; posY: 160
         width: 30; height: 30
         onTrigger: {
             // 针对set的列表
@@ -60,7 +64,7 @@ Window {
     // 串口按钮
     SerialPortButton{
         id: serialPortBtn
-        posX: 60; posY: 30
+        posX: 200; posY: 160
         width: 30; height: 30
         onTrigger: {
             // 针对serialport的列表
@@ -89,7 +93,7 @@ Window {
     // 无线按钮
     WlanButton{
         id: wlanBtn
-        posX: 20; posY: 30
+        posX: 160; posY: 160
         width: 30; height: 30
         onTrigger: {
             // 针对wlan的列表
@@ -117,7 +121,7 @@ Window {
     // 设置选项卡
     SetListView{
         id: setListView
-        posX: 100; posY: 65
+        posX: 240; posY: 195
         delegate_width: 80
         delegate_height: 30
     }
@@ -125,7 +129,7 @@ Window {
     // 串口选项卡
     SerialPortListView{
         id: serialPortListView
-        posX: 60; posY: 65
+        posX: 200; posY: 195
         delegate_width: 80
         delegate_height: 30
     }
@@ -133,7 +137,7 @@ Window {
     // 无线选项卡
     WlanListView{
         id: wlanListView
-        posX: 20; posY: 65
+        posX: 160; posY: 195
         delegate_width: 80
         delegate_height: 30
     }
@@ -193,6 +197,10 @@ Window {
                 myChart.pathSeries.append(setListView.simulationMessage.actual_x,
                                           setListView.simulationMessage.actual_y)
             }
+            onResetSimulate: {
+                myChart.pathSeries.clear();
+            }
+
             onChartPopup: {
                 myChart.state = "active"
                 chartbutton.state = "active"
@@ -213,11 +221,11 @@ Window {
             else if(chartbutton.state == "hover") myChart.state = ""
 
             // 针对serialport
-            serialPortBtn.state = "";
-            serialPortListView.listView.state = ""; serialPortListView.close();
+            //serialPortBtn.state = "";
+            //serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对wlan
-            wlanBtn.state = "";
-            wlanListView.listView.state = ""; wlanListView.close();
+            //wlanBtn.state = "";
+            //wlanListView.listView.state = ""; wlanListView.close();
             //针对set
         }
 
@@ -314,6 +322,9 @@ Window {
         north_X: setListView.simulationMessage.actual_x
         east_Y: setListView.simulationMessage.actual_y
         yaw: setListView.simulationMessage.actual_yaw
+        u: setListView.simulationMessage.actual_u
+        v: setListView.simulationMessage.actual_v
+        r: setListView.simulationMessage.actual_r
 
         // 创建与Simulation的信号连接
         Connections{
@@ -338,11 +349,11 @@ Window {
             else if(parapadbutton.state == "hover") parapad.state = ""
 
             // 针对serialport
-            serialPortBtn.state = "";
-            serialPortListView.listView.state = ""; serialPortListView.close();
+            //serialPortBtn.state = "";
+            //serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对wlan
-            wlanBtn.state = "";
-            wlanListView.listView.state = ""; wlanListView.close();
+            //wlanBtn.state = "";
+            //wlanListView.listView.state = ""; wlanListView.close();
             //针对set
         }
 
@@ -362,33 +373,33 @@ Window {
     // 速度仪表盘
     VelocityBoard{
         id: dashBoard
-        x: 20; y: 410
+        x: 140; y: 20
+        currentValue: setListView.simulationMessage.actual_u
     }
 
     // 航向仪表盘
     CourseBoard{
-        id: courseboard
-        x: 240; y: 410
+        id: courseBoard
+        x: 300; y: 20
         currentValue: setListView.simulationMessage.actual_yaw
     }
 
-    // 汽油仪表盘
-//    WaveProgress2{
-//        id: waveprogress
-//        x: 40; y: 420
-//    }
-
-    // 推力仪表盘
-    ArcBoard{
-        id: arcboard
-//        x: 100; y: 410
-        x: 200; y: 360
-
+    // 航向速度仪表盘
+    CourseRateBoard{
+        id: courseRateBoard
+        x: 23; y: 45
+        currentValue: setListView.simulationMessage.actual_r
     }
 
-    // 指南针
-//    MyCampass{
-//        id: mycampass
-//        x: 230; y: 410
+    // 油量
+    WaveProgress2{
+        x: 50; y: 30
+    }
+
+//    Bar{
+//        x: 0; y: 480
 //    }
+    My3DBar{
+        x: 0; y: 420
+    }
 }

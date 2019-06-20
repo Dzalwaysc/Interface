@@ -12,15 +12,15 @@ Rectangle{
     opacity: 0
     radius: 4
     x: -380
-    y: 150
+    y: 230
 
     // 仿真数据
     property double actual_x
     property double actual_y
-    property double actual_yaw
-    property double actual_u
+    property double actual_yaw: 30
+    property double actual_u: 10
     property double actual_v
-    property double actual_r
+    property double actual_r: 1.5
 
     // 字体
     property string fontfamily: "Monaco"
@@ -28,6 +28,7 @@ Rectangle{
 
     // 传给chart的信号，告诉chart仿真数据已更新
     signal updateSimulate()
+    signal resetSimulate()
 
     // 传给paraPad的信号，告诉paraPad弹出或者弹回
     signal paraPopup()
@@ -39,7 +40,7 @@ Rectangle{
 
     states: State {
         name: "active"
-        PropertyChanges { target: simulationMessage; opacity: 1; x: -2 }
+        PropertyChanges { target: simulationMessage; opacity: 1; x: 2 }
     }
 
     transitions: [
@@ -71,7 +72,7 @@ Rectangle{
         x: 20; y: 160
         btnText: "开始仿真"
         onClicked: {
-            simulation.runTest()
+            simulation.run();
             simuState.text = "正在进行";
         }
     }
@@ -84,7 +85,7 @@ Rectangle{
         anchors.left: startBtn.right; anchors.leftMargin: 10
         btnText: "停止仿真"
         onClicked: {
-            simulation.stopTest()
+            simulation.stop();
             simuState.text = "已停止...";
         }
     }
@@ -97,6 +98,7 @@ Rectangle{
         anchors.left: stopBtn.right; anchors.leftMargin: 10
         btnText: "重置"
         onClicked: {
+            simulation.reset();
             simuState.text = "未开始...";
         }
     }
@@ -140,11 +142,19 @@ Rectangle{
     // 仿真测试
     Simulation{
        id: simulation
-       onUpdateGo: {
-           actual_x = simulation.actualX.toFixed(1);
-           actual_y = simulation.actualY.toFixed(1);
-           actual_yaw = simulation.actualYaw.toFixed(1);
+       onShipDataUpdate: {
+           actual_x = simulation.x.toFixed(1);
+           actual_y = simulation.y.toFixed(1);
+           actual_yaw = simulation.yaw.toFixed(1);
+           actual_u = simulation.u.toFixed(1);
+           actual_v = simulation.v.toFixed(1);
+           actual_r = simulation.r.toFixed(1);
            updateSimulate();
+       }
+       onSimulationReset: {
+           actual_x = 0; actual_y = 0; actual_yaw = 0;
+           actual_u = 0; actual_v = 0; actual_r = 0;
+           resetSimulate();
        }
     }
 

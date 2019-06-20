@@ -2,6 +2,7 @@
 **value表示当前鼠标位置
        暴露currentValue，用currValue从外界获取当前值
 **动画效果使指针摆动更真实，没有动画效果指针会直接跳到当前值
+**unitText显示单位“km/h”  indexText显示当前值
 ***********/
 
 
@@ -11,197 +12,155 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
 import QtQuick.Extras.Private 1.0
 
-Rectangle {
-    id:biao
-    width: 150
-    height: 150
-    color: "transparent"
-    property double currentValue: 0
+CircularGauge {
+
+    id: velocityBoard
+    width: 120
+    height: 120
+    property double currentValue
     property string fontfamily: "Monaco"
 
-    CircularGauge {
-        id: dashboard
+    // 表盘上显示的最大值/最小值
+    maximumValue: 20
+    minimumValue: 0
 
-        value:  currentValue
+    // 当前值
+    value:  currentValue
 
-        anchors.centerIn: parent
-        anchors.fill: parent
+    style: CircularGaugeStyle {
+        // 表盘刻度最小值/最大值，12点方向向右是正值
+        maximumValueAngle: 145
+        minimumValueAngle: -145
 
-        style: CircularGaugeStyle {
+        labelInset:-6   // 表盘文本到中心的距离
+        labelStepSize: 2 // 表盘文本的步长
 
-            maximumValueAngle: 120
-            minimumValueAngle: -120
+        // 大刻度设置
+        tickmarkStepSize: 2 // 大刻度的步长
+        tickmarkInset: 6    // 大刻度到中心的距离
 
-      //指针
-      needle: Rectangle {
-          y: outerRadius * 0.15
-          implicitWidth: outerRadius * 0.03
-          implicitHeight: outerRadius * 0.9
-          antialiasing: true
-          color: "#e34c22"
-      }
+        // 小刻度设置
+        minorTickmarkInset: 6
+        minorTickmarkCount: 3
 
-      //指针中间旋钮
-      foreground: Item {
-          Rectangle {
-              id: circular
-              width: outerRadius * 0.2
-              height: width
-              radius: width / 2
-              color: "#494d53"
-              anchors.centerIn: parent
-          }
-      }
-
-      //刻度标签颜色
-      tickmarkLabel:  Text {
-          font.pixelSize: Math.max(6, outerRadius * 0.1)
-          text: styleData.value
-          color: styleData.value >= 80 ? "#e34c22" : Qt.lighter("#06B9D1")
-          antialiasing: true
-          font.family: fontfamily
-      }
-
-      //标签距离
-      labelInset:20
-
-      //大刻度线加红
-      tickmark: Rectangle {
-          visible: styleData.value < 80 || styleData.value % 10 == 0
-          implicitWidth: outerRadius * 0.03
-          antialiasing: true
-          implicitHeight: outerRadius * 0.15
-          color: styleData.value >= 80 ? "#e34c22" : Qt.lighter("#06B9D1")        //e5e5e5
-      }
-
-      //去掉红格后面的小刻度线
-      minorTickmark: Rectangle {
-          visible: styleData.value < 80
-          implicitWidth: outerRadius * 0.01
-          antialiasing: true
-          implicitHeight: outerRadius * 0.07
-          color: Qt.lighter("#06B9D1")
-      }
-
-      //橙色线以示警告
-      function degreesToRadians(degrees) {
-          return degrees * (Math.PI / 180);
-      }
-
-        background: Canvas {
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.reset();
-
-                ctx.beginPath();
-                ctx.strokeStyle = "#e34c22";
-                ctx.lineWidth = outerRadius * 0.03;
-
-                //{x,y,r,起始角,终止角}请注意，在转换为弧度之前，我们减去90度，因为我们的原点是北，画布是东。
-                ctx.arc(outerRadius, outerRadius, outerRadius - ctx.lineWidth / 2,
-                  degreesToRadians(valueToAngle(80) - 90), degreesToRadians(valueToAngle(100) - 90));
-                ctx.stroke();
+        // 表盘的指针
+        needle: Item{
+            Image{
+                anchors.horizontalCenter: parent.horizontalCenter
+                y: -45
+                width: outerRadius * 0.5
+                height: outerRadius * 0.5
+                source: "image/needle.png"
             }
         }
-    }
 
-        Behavior on value {
-            NumberAnimation {duration: 500}
-        }
-    }
-
-    CircularGauge{
-        id: small
-
-        width: biao.width; height: biao.height
-        value: accelerating ? maximumValue : 0
-        property bool accelerating: false
-
-        Keys.onSpacePressed: accelerating = true
-        Keys.onReleased: {
-            if (event.key === Qt.Key_Space) {
-                 accelerating = false;
-                 event.accepted = true;
-             }
-        }
-
-        Component.onCompleted: forceActiveFocus()
-
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 30
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        maximumValue: 10
-        minimumValue: 0
-
-        style: CircularGaugeStyle {
-
-            maximumValueAngle: 240
-            minimumValueAngle: 120
-
-            needle: Rectangle {
-                y: outerRadius * 0.1
-                implicitWidth: outerRadius * 0.03
-                implicitHeight: outerRadius * 0.6
-                antialiasing: true
-                color:"#7CFC00"// Qt.lighter("#00FF80")
+        // 表盘前景，即指针中间旋钮
+        foreground: Item {
+            Image{
+                width: outerRadius * 1.0
+                height: outerRadius * 1.0
+                anchors.centerIn: parent
+                source: "image/circle.png"
             }
-
-            tickmarkLabel:  Text {
-                font.pixelSize: Math.max(6, outerRadius * 0.1)
-                text: styleData.value
-                color: "#7CFC00"//Qt.lighter("#00FF80")
-                antialiasing: true
+            Text{
+                text: currentValue.toFixed(1)
+                color: "white"
                 font.family: fontfamily
+                font.pixelSize: 16
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 10
             }
-
-            tickmark: Rectangle {
-                implicitWidth: outerRadius * 0.02
-                antialiasing: true
-                implicitHeight: outerRadius * 0.10
-                color: "#7CFC00"//Qt.lighter("#00FF80")
-            }
-
-            minorTickmark: Rectangle {
-                implicitWidth: outerRadius * 0.005
-                antialiasing: true
-                implicitHeight: outerRadius * 0.03
-                color: "#7CFC00"//Qt.lighter("#00FF80")
-            }
-
-            labelInset: 45
-            tickmarkInset: 30
-            minorTickmarkInset: 30
-            tickmarkStepSize: 2
-            minorTickmarkCount: 3
         }
 
-        Behavior on value {
-            NumberAnimation {duration: 500}
+        // 大刻度标签
+        tickmarkLabel: Text {
+            id: tickLabel
+            anchors.top: parent.top
+            font.pixelSize: 10
+            text: styleData.value
+            color: "white" // Qt.lighter("#06B9D1")
+            antialiasing: true
+            font.family: fontfamily
+        }
+
+        // 大刻度线
+        tickmark: Rectangle {
+            implicitWidth: outerRadius * 0.05
+            implicitHeight: outerRadius * 0.05
+            radius: implicitWidth / 2
+            antialiasing: true
+            color: Qt.lighter("#06B9D1")
+        }
+
+        // 表盘背景
+        background: Item{
+
+            // 外圆环
+            Image{
+                anchors.fill: parent
+                source: "image/outerCircle.png"
+            }
+
+            // 内围能量条
+            Canvas{
+                id: background
+                anchors.fill: parent
+                property double currentAngle: valueToAngle(currentValue)*Math.PI/180; // 当前的刻度值对应的角度
+                property double initAngle: valueToAngle(0)*Math.PI/180;               // 初始刻度值对应的角度
+                property double oX: velocityBoard.width/2                 // 圆心x
+                property double oY: velocityBoard.height/2                // 圆心x
+                property double oR: velocityBoard.width/2-25             // 能量条半径
+                onPaint: {
+                    var ctx = getContext("2d");
+                    // 内围能量条
+                    var drawInterCirc = function(){
+                        ctx.beginPath();
+                        if(currentValue > 10){
+                            ctx.strokeStyle = "#EA2121";
+                        }else{
+                            ctx.strokeStyle = "#33FFFC";
+                        }
+                        //ctx.strokeStyle = "#33FFFC" //"#06B9D1";
+                        ctx.lineWidth = 15;
+                        // 为了对齐仪表盘控件的坐标，角度还要减去90度
+                        ctx.arc(oX, oY, oR, initAngle - Math.PI/2, currentAngle  - Math.PI/2, false);
+                        ctx.stroke();
+                    }
+                    ctx.clearRect(0, 0, velocityBoard.width, velocityBoard.height);
+                    drawInterCirc();
+                }
+                Connections{
+                    target: velocityBoard
+                    onCurrentValueChanged:{
+                        background.requestPaint();
+                    }
+                }
+            }
         }
     }
-
-
-    Text {
-        id: unitText
-        text: "km/h"
-        color: Qt.lighter("#06B9D1")
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 40
-        font.pixelSize: 12
-        font.family: fontfamily
-    }
-
-    Text {
-        id: indexText
-        text: dashboard.value.toFixed(1)
-        color: Qt.lighter("#06B9D1")
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 30
-        font.pixelSize: 12
-        font.family: fontfamily
-    }
-
 }
+
+
+//Text {
+//    id: unitText
+//    text: "km/h"
+//    color: Qt.lighter("#06B9D1")
+//    anchors.horizontalCenter: parent.horizontalCenter
+//    anchors.top: parent.top
+//    anchors.topMargin: 40
+//    font.pixelSize: 12
+//    font.family: fontfamily
+//}
+
+//Text {
+//    id: indexText
+//    text: dashboard.value.toFixed(1)
+//    color: Qt.lighter("#06B9D1")
+//    anchors.verticalCenter: parent.verticalCenter
+//    anchors.horizontalCenter: parent.horizontalCenter
+//    anchors.horizontalCenterOffset: 40
+//    font.pixelSize: 12
+//    font.bold: true
+//    font.family: fontfamily
+//}
