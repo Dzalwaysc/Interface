@@ -18,6 +18,7 @@
 
 import QtQuick 2.2
 import "script/chartscript.js" as Script
+import "../button"
 //地面站那块儿点开
 
 Rectangle{
@@ -35,7 +36,7 @@ Rectangle{
     property real rectwidth: 100                 //每个矩形的宽
     property real rectheight: 30                //每个矩形的高
     property color header_fontcolor: "black"    //表头字体颜色
-    property real header_fontsize: 15           //表头字体大小
+    property real fontpixelSize: 15             //字体大小
 
 
     property color debugcolor: "black"  // Component的边框颜色
@@ -89,6 +90,7 @@ Rectangle{
                     selectedTextColor: "red"
                     text: orderNo; anchors.centerIn: parent
                     font.family: fontfamily
+                    font.pixelSize: fontpixelSize
                     onAccepted: {
                         orderNo = text
                         textInputChanged(index,"orderNo")
@@ -105,6 +107,7 @@ Rectangle{
                     selectedTextColor: "red"
                     text: positionX; anchors.centerIn: parent
                     font.family: fontfamily
+                    font.pixelSize: fontpixelSize
                     onAccepted: {
                         positionX = text
                         textInputChanged(index,"positionX")
@@ -122,6 +125,7 @@ Rectangle{
                     selectedTextColor: "red"
                     text: positionY; anchors.centerIn: parent
                     font.family: fontfamily
+                    font.pixelSize: fontpixelSize
                     onAccepted: {
                         positionY = text
                         textInputChanged(index,"positionY")
@@ -141,19 +145,19 @@ Rectangle{
                 color: "#ADFF99"
                 border.color: debugcolor; radius: 2
                 width: rectwidth; height: rectheight
-                Text{text: "NO"; color: header_fontcolor;font.pixelSize: header_fontsize; anchors.centerIn: parent;font.family: fontfamily}
+                Text{text: "NO"; color: header_fontcolor;font.pixelSize: fontpixelSize; anchors.centerIn: parent;font.family: fontfamily}
             }
             Rectangle{
                 color: "#ADFF99"
                 border.color: debugcolor; radius: 2
                 width: rectwidth; height: rectheight
-                Text{text: "posX"; color: header_fontcolor; font.pixelSize: header_fontsize;anchors.centerIn: parent;font.family: fontfamily}
+                Text{text: "posX"; color: header_fontcolor; font.pixelSize: fontpixelSize;anchors.centerIn: parent;font.family: fontfamily}
             }
             Rectangle{
                 color: "#ADFF99"
                 border.color: debugcolor; radius: 2
                 width: rectwidth; height: rectheight
-                Text{text: "posY"; color: header_fontcolor; font.pixelSize: header_fontsize;anchors.centerIn: parent;font.family: fontfamily}
+                Text{text: "posY"; color: header_fontcolor; font.pixelSize: fontpixelSize;anchors.centerIn: parent;font.family: fontfamily}
             }
         }
     }
@@ -225,21 +229,14 @@ Rectangle{
                     else startButton.state = "";
                 }
             }
-            Rectangle{
+
+            BoxOne{
                 id:introduction_start
-                border.color: debugcolor; radius: 2
-                width: 40; height: rectheight
+                mW: 40; mH: rectheight
                 opacity: 0
                 y: -40
-                Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
                 anchors.horizontalCenter: startButton.horizontalCenter
-                Text{
-                    text: "开始"
-                    color: "black"
-                    anchors.centerIn: parent
-                    font.family: fontfamily
-                    font.bold: true
-                }
+                context: "开始"
             }
         }
 
@@ -288,21 +285,13 @@ Rectangle{
                 }
             }
 
-            Rectangle{
+            BoxOne{
                 id:introduction_add
-                border.color: debugcolor; radius: 2
-                width: 40; height: rectheight
+                mW: 40; mH: rectheight
                 opacity: 0
                 y: -40
-                Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
                 anchors.horizontalCenter: addButton.horizontalCenter
-                Text{
-                    text: "添加"
-                    color: "black"
-                    anchors.centerIn: parent
-                    font.family: fontfamily
-                    font.bold: true
-                }
+                context: "添加"
             }
         }
 
@@ -346,21 +335,13 @@ Rectangle{
                     else clearallButton.state = "";
                 }
             }
-            Rectangle{
+            BoxOne{
                 id:introduction_clear
-                border.color: debugcolor; radius: 2
-                width: 40; height: rectheight
+                mW: 40; mH: rectheight
                 opacity: 0
                 y: -40
-                Behavior on y { SpringAnimation{spring: 2; damping: 0.2}}
                 anchors.horizontalCenter: clearallButton.horizontalCenter
-                Text{
-                    text: "清理"
-                    color: "black"
-                    anchors.centerIn: parent
-                    font.family: fontfamily
-                    font.bold: true
-                }
+                context: "清理"
             }
         }
     }

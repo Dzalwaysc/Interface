@@ -18,6 +18,7 @@ Item {
     //字体
     property string fontfamily: "Monaco"
     property color fontcolor: "black"
+    property real fontpixelSize: 15
 
     // 点击WlanBtn时，关闭Message窗口
     signal close()
@@ -66,6 +67,7 @@ Item {
                     color: "white"
                     text: name
                     font.family: fontfamily
+                    font.pixelSize: fontpixelSize
                 }
             }
         }

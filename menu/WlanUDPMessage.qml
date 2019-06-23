@@ -16,7 +16,7 @@ Rectangle{
 
     property string fontfamily: "Monaco"
     property color fontcolor: "white"
-
+    property real fontpixelSize: 13
 
     states:  State {
         name: "active"
@@ -42,6 +42,7 @@ Rectangle{
         text: "协议类型: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -55,7 +56,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             text: "UDP"
             font.family: fontfamily
@@ -72,6 +73,7 @@ Rectangle{
         text: "本地IP: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -85,7 +87,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             text: udp.localHostName
             font.family: fontfamily
@@ -102,6 +104,7 @@ Rectangle{
         text: "本地端口: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -115,7 +118,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             text: udp.localPort
             font.family: fontfamily
@@ -132,6 +135,7 @@ Rectangle{
         text: "目标IP: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -145,7 +149,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             text: udp.targetHostName
             font.family: fontfamily
@@ -162,6 +166,7 @@ Rectangle{
         text: "目标端口: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -175,7 +180,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             text: udp.targetPort
             font.family: fontfamily
@@ -192,6 +197,7 @@ Rectangle{
         text: "网络数据接收: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     TextScreen{
@@ -209,10 +215,11 @@ Rectangle{
         color: Qt.rgba(255, 0, 0, .4)
         border.color: fontcolor
         TextInput{
+            x:10
             anchors.verticalCenter: parent.verticalCenter
             color: fontcolor
             selectByMouse: true
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             font.family: fontfamily
             text: udp.response
@@ -234,7 +241,7 @@ Rectangle{
         x:245; y:105
         text: "未绑定... "
         color: fontcolor
-        font.pixelSize: 13
+        font.pixelSize: fontpixelSize
         font.family: fontfamily
     }
 

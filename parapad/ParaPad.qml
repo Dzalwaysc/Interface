@@ -14,8 +14,8 @@ Rectangle{
     property real posX: 0
     property real posY: 0
 
-    property real fontsize: 12
-    property color fontcolor: "black"
+    property real fontsize: 12                         //字体大小
+    property color fontcolor: "black"                  //字体颜色
     property string fontfamily: "Monaco"
 
     property double north_X

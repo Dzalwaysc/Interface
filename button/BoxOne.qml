@@ -18,5 +18,6 @@ Rectangle{
         color: "white"
         text: context
         font.family: "Monaco"
+        font.pixelSize: 15             //字体大小
     }
 }

@@ -25,6 +25,7 @@ Rectangle{
     // 字体
     property string fontfamily: "Monaco"
     property color fontcolor: "white"
+    property real fontpixelSize: 15
 
     // 传给chart的信号，告诉chart仿真数据已更新
     signal updateSimulate()
@@ -59,7 +60,7 @@ Rectangle{
         id: simuState
         text: "未开始..."
         font.family: fontfamily
-        font.pixelSize: 15
+        font.pixelSize: fontpixelSize
         color:fontcolor
         anchors.top: simulationMessage.top; anchors.topMargin: 10
         anchors.right: simulationMessage.right; anchors.rightMargin: 10

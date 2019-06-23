@@ -52,6 +52,7 @@ Item{
     rotation: chart_rotation
 
     property string fontfamily: "Monaco"
+    property real fontpixelSize: 15            //字体大小
 
     // 坐标轴属性
     property real chart_width
@@ -144,6 +145,7 @@ Item{
             gridVisible: true
             labelsColor: "red"
             labelsFont.family: fontfamily
+            labelsFont.pixelSize: fontpixelSize
         }
 
         ValueAxis{
@@ -154,6 +156,7 @@ Item{
             labelsVisible: false
             gridVisible: false
             labelsFont.family: fontfamily
+            labelsFont.pixelSize: fontpixelSize
         }
 
         ValueAxis{
@@ -165,6 +168,7 @@ Item{
             gridVisible: true
             labelsColor: "red"
             labelsFont.family: fontfamily
+            labelsFont.pixelSize: fontpixelSize
         }
 
         ValueAxis{
@@ -176,6 +180,7 @@ Item{
             gridVisible: false
             labelsColor: "red"
             labelsFont.family: fontfamily
+            labelsFont.pixelSize: fontpixelSize
         }
 
         LineSeries{
@@ -190,14 +195,18 @@ Item{
         ScatterSeries{
             id: targetPointSeries
             axisX: axisX; axisY: axisY
-            pointsVisible: true; color: "#7cfc00"; borderWidth: 0     //数据点是否可见并需要绘制
+            pointsVisible: true;
+            color: "#7cfc00";
+            borderWidth: 0     //数据点是否可见并需要绘制
             markerSize: 8                                             //标记点的大小
-            pointLabelsVisible: true; pointLabelsColor: "red"
+            pointLabelsVisible: true;
+            pointLabelsColor: "red"
             pointLabelsFont: fontfamily
             property string state: "ready"
 
+            Component.onCompleted: console.log("字体大小" + pointLabelsFont.pixelSize)
+
             onClicked: {
-                console.log(point)
                 move_point_x = point.x; move_point_y = point.y;
                 itemMouseArea.enabled = true;
                 state = "moving"
@@ -228,10 +237,12 @@ Item{
         Text {
             // opacity在 onEntered中被改成1
             id: mouseValueText
-            opacity: 0; color: "black"           //不透明度
+            opacity: 0; color: "green"           //不透明度
             x: itemMouseArea.mouseX + 5; y: itemMouseArea.mouseY - 10
             text: currentx + ", " + currenty
             font.family: fontfamily
+            font.pixelSize: fontpixelSize
+
         }
 
         onEntered: {
@@ -326,7 +337,6 @@ Item{
         id: zoomArea;
         opacity: 0.5
         color: "white"
-
         radius: 5             //此属性保留用于绘制圆角矩形的角半径。
         border.color: "black"
 

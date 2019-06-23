@@ -5,7 +5,6 @@ Rectangle {
     width: 430
     height: 200
     color: "transparent"
-
     property real bobValue1: 37
     property real bobValue2: 14
     property real bobValue3: 83

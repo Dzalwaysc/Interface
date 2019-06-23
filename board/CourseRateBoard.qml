@@ -1,3 +1,7 @@
+/***********************************
+**大刻度标签字体：10
+**表盘前景字体：  16
+**********************************/
 import QtQuick 2.9
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
