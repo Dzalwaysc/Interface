@@ -24,6 +24,7 @@ Rectangle{
     //字体
     property string fontfamily: "Monaco"
     property color fontcolor: "white"
+    property real fontpixelSize: 13
 
     states:  State {
         name: "active"
@@ -49,7 +50,7 @@ Rectangle{
         color: fontcolor
         anchors.top: parent.top; anchors.topMargin: 5
         anchors.left: parent.left; anchors.leftMargin: 12
-        font.pixelSize: 15
+        font.pixelSize: fontpixelSize
         Rectangle{
             width: 250; height: 1
             color: fontcolor
@@ -63,11 +64,11 @@ Rectangle{
         anchors.left: parent.left; anchors.leftMargin: 12
         rows: 5
         spacing: 5
-        Text{text:"串口: " + commName; color: fontcolor; font.family: fontfamily}
-        Text{text:"波特率: " + buadRate; color: fontcolor; font.family: fontfamily}
-        Text{text:"数据位: " + dataBits; color: fontcolor; font.family: fontfamily}
-        Text{text:"停止位: " + stopBits; color: fontcolor; font.family: fontfamily}
-        Text{text:"校验位: " + parity; color: fontcolor; font.family: fontfamily}
+        Text{text:"串口: " + commName; color: fontcolor; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"波特率: " + buadRate; color: fontcolor; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"数据位: " + dataBits; color: fontcolor; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"停止位: " + stopBits; color: fontcolor; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"校验位: " + parity; color: fontcolor; font.family: fontfamily; font.pixelSize: fontpixelSize}
     }
 
 
@@ -76,7 +77,7 @@ Rectangle{
         id: comState
         text: "未连接..."
         font.family: fontfamily
-        font.pixelSize: 15
+        font.pixelSize: fontpixelSize
         color: fontcolor
         anchors.top: comInfoName.top
         anchors.left: comInfoName.right; anchors.leftMargin: 200
@@ -87,7 +88,7 @@ Rectangle{
         id: startBtn
         btnWidth: 80; btnHeight: 30
         btnText: "打开串口"
-        anchors.top: comInfo.bottom; anchors.topMargin: 20
+        anchors.top: comInfo.bottom; anchors.topMargin: 10
         anchors.left: comInfo.left;
         onClicked: {
             comm.startSlave(comm.portName, comm.response);
@@ -113,6 +114,7 @@ Rectangle{
         id: recvName
         text: "串口接受数据:"
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
         color: fontcolor
         anchors.top: comInfoName.bottom; anchors.topMargin: 5
         anchors.left: parent.left; anchors.leftMargin: 150
@@ -143,6 +145,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             color: fontcolor
             font.family: fontfamily
+            font.pixelSize: fontpixelSize
             selectedTextColor: "red"
             selectByMouse: true
             text: "hello"

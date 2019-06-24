@@ -38,6 +38,7 @@ Item{
 
     //字体
     property string fontfamily: "Monaco"
+    property real fontpixelSize: 15
 
     // 内置属性 highligth的透明度
     property real highligth_opacity: 1
@@ -92,6 +93,7 @@ Item{
                     anchors.centerIn: parent
                     color: "white"
                     font.family: fontfamily
+                    font.pixelSize: fontpixelSize
                     text: name
                 }
             }
@@ -195,7 +197,6 @@ Item{
             color: "transparent"
             border.color: "white"
         }
-
         spread: 0.5          //在光源边缘附近增强辉光颜色的大部分
         opacity: 1
     }

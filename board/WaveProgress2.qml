@@ -1,3 +1,7 @@
+/************
+**百分数字体：0.2*mW
+***********/
+
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 

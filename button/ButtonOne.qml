@@ -9,6 +9,11 @@
 **        clicked()  单击按钮发出该信号
 ***************************/
 
+/*******************************
+**所有窗口出现文字的地方都定义字体大小
+**否则会出现系统自定义字体不同而混乱，影响界面美观
+********************************/
+
 import QtQuick 2.0
 
 Rectangle{
@@ -25,6 +30,7 @@ Rectangle{
 
     //内置属性
     property string fontfamily: "Monaco"
+    property real fontpielSize: 15             //字体大小
 
     //用户信号
     signal clicked()
@@ -42,7 +48,7 @@ Rectangle{
         }
     }
 
-    Text{text: btnText; color: "white"; font.family: fontfamily; anchors.centerIn: parent}
+    Text{text: btnText; color: "white"; font.family: fontfamily; anchors.centerIn: parent; font.pixelSize: fontpielSize}
 
     MouseArea{
         anchors.fill: parent

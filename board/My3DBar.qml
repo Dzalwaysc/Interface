@@ -5,6 +5,7 @@ Item {
     height: 300
     x: 50
     y: 100
+    z:-1
 
     property double cameraRotationX: 0 // 初始的相机旋转角度
     property double cameraRotationY: 0 // 初始的相机旋转角度
@@ -18,6 +19,8 @@ Item {
     property string color_cte: "#EA74F5"
     property string color_distance: "#F5F574"
     property string color_high: "blue"
+
+    property real fontpixelSize: 13
 
     // 主体
     ThemeColor{
@@ -133,7 +136,7 @@ Item {
     // 旋转区域
     Rectangle{
         id: mouseArea
-        x:42; y:44
+        x:42; y:44; z: -1
         width: 215; height: 106
         border.color: "transparent"
         color: "transparent"
@@ -185,6 +188,7 @@ Item {
             color: "white"
             text: "速度偏差: " + dataModel_1.get(0).expenses + "米/秒"
             font.family: "Monaco"
+            font.pixelSize: fontpixelSize
         }
 
         Rectangle{
@@ -237,6 +241,7 @@ Item {
             color: "white"
             text: "艏向偏差: " + dataModel_2.get(0).expenses + "度"
             font.family: "Monaco"
+            font.pixelSize: fontpixelSize
         }
 
         Rectangle{
@@ -289,6 +294,7 @@ Item {
             color: "white"
             text: "横侧偏差: " + dataModel_3.get(0).expenses + "米"
             font.family: "Monaco"
+            font.pixelSize: fontpixelSize
         }
 
         Rectangle{
@@ -341,6 +347,7 @@ Item {
             color: "white"
             text: "目标距离" + dataModel_4.get(0).expenses + "米"
             font.family: "Monaco"
+            font.pixelSize: fontpixelSize
         }
 
         Rectangle{
@@ -388,6 +395,7 @@ Item {
         y: 130 - dataModel_1.get(0).expenses*1.2  + 90 * Math.sin(rotationX*Math.PI/180) * Math.sin(rotationY*Math.PI/180)    //* Math.cos(rotationY*Math.PI/180)//130 - dataModel_1.get(0).expenses * 1.2
         text: dataModel_1.get(0).expenses.toFixed(1) + "m/s"
         font.family: "Monaco"
+        font.pixelSize: fontpixelSize
         color: "white"
     }
     onRotationYChanged: {

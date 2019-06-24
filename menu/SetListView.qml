@@ -16,6 +16,7 @@ Item {
     // 字体
     property string fontfamily: "Monaco"
     property color fontcolor: "black"
+    property real fontpixelSize: 15
 
     // 将simulationMessage暴露给外部使用，因为仿真数据需要传导参数面板和坐标轴上
     property alias simulationMessage: simulationMessage
@@ -63,6 +64,7 @@ Item {
                     id: contactInfo
                     anchors.centerIn: parent
                     font.family: fontfamily
+                    font.pixelSize: fontpixelSize
                     color: "white" //highligth_opacity == 0.1 ? Qt.lighter("black") : Qt.lighter("white") //Qt.lighter("black")
                     text: name
                 }
@@ -116,7 +118,12 @@ Item {
         radius: 3             //半径决定辉光的柔和度，半径越大辉光的边缘越模糊  样本值=1+半径*2
         samples: 13           //每个像素采集的样本值，值越大，质量越好，渲染越慢
         color: "#ddd"
-        source: listView
+        source: Rectangle{
+            width: delegate_width; height: delegate_height
+            radius: 2
+            color: "transparent"
+            border.color: "white"
+        }
         spread: 0.5           //在光源边缘附近增强辉光颜色的大部分
         opacity: 0.8
     }

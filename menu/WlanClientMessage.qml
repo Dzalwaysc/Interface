@@ -17,6 +17,7 @@ Rectangle{
     //字体
     property string fontfamily: "Monaco"
     property color fontcolor: "white"
+    property real fontpixelSize: 13
 
     // 在单击start按钮后，等待执行完onClicked的操作后发送该信号，对TCP/UDP进行操作，暴露给外部使用
     signal startTrigger()
@@ -47,6 +48,7 @@ Rectangle{
         text: "协议类型: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -60,7 +62,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             text: "TCP client"
             font.family: fontfamily
@@ -76,6 +78,7 @@ Rectangle{
         text: "服务器端口: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -89,7 +92,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             font.family: fontfamily
             selectByMouse: true
@@ -109,6 +112,7 @@ Rectangle{
         text: "服务器地址: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     Rectangle{
@@ -122,7 +126,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             x:10
             color: fontcolor
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             font.family: fontfamily
             selectByMouse: true
@@ -140,7 +144,7 @@ Rectangle{
         anchors.left: parent.left; anchors.leftMargin: 10
         text: "服务器断开... "
         color: fontcolor
-        font.pixelSize: 13
+        font.pixelSize: fontpixelSize
         font.family: fontfamily
     }
 
@@ -173,6 +177,7 @@ Rectangle{
         text: "网络数据接收: "
         color: fontcolor
         font.family: fontfamily
+        font.pixelSize: fontpixelSize
     }
 
     // 选项卡中的文字框
@@ -188,14 +193,14 @@ Rectangle{
         color: Qt.rgba(255, 0, 0, .4)
         border.color: fontcolor
         TextInput{
-            id:input
+            x:10
             anchors.verticalCenter: parent.verticalCenter
             color: fontcolor
             selectByMouse: true
-            font.pixelSize: 13
+            font.pixelSize: fontpixelSize
             focus: true
             font.family: fontfamily
-            text:"你好帅你好帅你好帅你好帅"
+            text:"hello"
         }
     }
 

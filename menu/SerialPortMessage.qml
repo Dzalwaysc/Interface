@@ -40,6 +40,8 @@ Rectangle{
 
     //字体
     property string fontfamily: "Monaco"
+    property real fontpixelSize: 13
+
 
     // 这个属性暴露给外部，令其能够改变serialport的图片，这两项属性均在下面的serialImgRect中
     property alias source: serialImg.source
@@ -80,6 +82,7 @@ Rectangle{
             text: imgName
             color: "white"
             font.family: fontfamily
+            font.pixelSize: fontpixelSize
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.bottom; anchors.topMargin: 5
         }
@@ -90,11 +93,11 @@ Rectangle{
         anchors.top: serialImgRect.top
         anchors.left: serialImgRect.right; anchors.leftMargin: 50
         spacing: 2
-        Text{text:"串 口: " + commName/*"Comm1"*/; color: "white"; font.family: fontfamily}
-        Text{text:"波特率: " + buadRate/*"9600"*/; color: "white"; font.family: fontfamily}
-        Text{text:"数据位: " + dataBits/*"Data8"*/; color: "white"; font.family: fontfamily}
-        Text{text:"停止位: " + stopBits/*"OneStop"*/; color: "white"; font.family: fontfamily}
-        Text{text:"校验位: " + parity/*"NoParity"*/; color: "white"; font.family: fontfamily}
+        Text{text:"串 口: " + commName/*"Comm1"*/; color: "white"; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"波特率: " + buadRate/*"9600"*/; color: "white"; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"数据位: " + dataBits/*"Data8"*/; color: "white"; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"停止位: " + stopBits/*"OneStop"*/; color: "white"; font.family: fontfamily; font.pixelSize: fontpixelSize}
+        Text{text:"校验位: " + parity/*"NoParity"*/; color: "white"; font.family: fontfamily; font.pixelSize: fontpixelSize}
     }
 
     // 选项卡中的start/close按钮
