@@ -422,11 +422,6 @@ Item {
         text: dataModel_1.get(0).expenses.toFixed(1) + "m/s"
         font.family: "Monaco"
         color: "red"
-
-        onXChanged: {
-            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
-                        + "  x: " + data_1.anchors.horizontalCenterOffset + "  y:" + data_1.anchors.verticalCenterOffset)
-        }
     }
 
     Text{
@@ -448,11 +443,6 @@ Item {
         text: dataModel_2.get(0).expenses.toFixed(1) + "m/s"
         font.family: "Monaco"
         color: "red"
-
-        onXChanged: {
-            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
-                        + "  x: " + data_2.anchors.horizontalCenterOffset + "  y:" + data_2.anchors.verticalCenterOffset)
-        }
     }
 
     Text{
@@ -474,11 +464,6 @@ Item {
         text: dataModel_3.get(0).expenses.toFixed(1) + "m/s"
         font.family: "Monaco"
         color: "red"
-
-        onXChanged: {
-            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
-                        + "  x: " + data_3.anchors.horizontalCenterOffset + "  y:" + data_3.anchors.verticalCenterOffset)
-        }
     }
 
     Text{
@@ -500,15 +485,5 @@ Item {
         text: dataModel_4.get(0).expenses.toFixed(1) + "m/s"
         font.family: "Monaco"
         color: "red"
-
-        onXChanged: {
-            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
-                        + "  x: " + data_4.anchors.horizontalCenterOffset + "  y:" + data_4.anchors.verticalCenterOffset)
-        }
-    }
-
-    Component.onCompleted: {
-        console.log(dataModel_1.get(0).expenses);
-        console.log(data_1.y)
     }
 }
