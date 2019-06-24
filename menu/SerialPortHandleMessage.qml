@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtGraphicalEffects 1.0
 import "../button"
 import io.serialport 1.0
-
+// 12312312
 Rectangle{
     id: serialportMessage
     width: 380; height: 200
@@ -62,11 +62,14 @@ Rectangle{
         anchors.left: parent.left; anchors.leftMargin: 12
         rows: 5
         spacing: 5
-        Text{text:"串口: " + commName; color: fontcolor; font.family: fontfamily}
+        Text{text:"串口: " + commName; color: fontcolor; font.family: fontfamily; font.pixelSize: 13}
         Text{text:"波特率: " + buadRate; color: fontcolor; font.family: fontfamily}
         Text{text:"数据位: " + dataBits; color: fontcolor; font.family: fontfamily}
         Text{text:"停止位: " + stopBits; color: fontcolor; font.family: fontfamily}
         Text{text:"校验位: " + parity; color: fontcolor; font.family: fontfamily}
+        Component.onCompleted: {
+            console.log("width: " + comInfo.width + "height: " + comInfo.height)
+        }
     }
 
 
