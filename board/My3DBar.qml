@@ -5,7 +5,7 @@ Item {
     height: 300
     x: 50
     y: 100
-    z:-1
+    z:1
 
     property double cameraRotationX: 0 // 初始的相机旋转角度
     property double cameraRotationY: 0 // 初始的相机旋转角度
@@ -136,7 +136,7 @@ Item {
     // 旋转区域
     Rectangle{
         id: mouseArea
-        x:42; y:44; z: -1
+        x:42; y:44;
         width: 215; height: 106
         border.color: "transparent"
         color: "transparent"
@@ -373,40 +373,43 @@ Item {
     }
 
 
-    // 字的位置: bar在100的时候, y=10 && bar在0的时候, y=130, 即bar每变化1, y反向变化1.2
-    // 当前的y = 130 - 当前时刻的bar * 1.2
 
     // 旋转
     // 1. 求得x旋转半径为 x_offset
     // 2. 求得x旋转后的x坐标，x_offset * cos(rotationX)
-    // 3. 求得y旋转半径，y_offset    y_offset-Math.sin(rotationX)*20
+    // 3. 求得y旋转半径，y_offset
     // 4. 求得y旋转后的y坐标，y_offset * cos(rotationY)
 
     // 旋转的时候产生的偏置
-    // 1. x旋转的时候，旁边的阴影产生的偏置 0.3 * bar * sin(rotationY) * cos(rotationX)
-    //              系数0.3  =>  在barValue为100的时候，rotationX=0, rotationY 从0到90度，发现x应该偏置30。
+    // 1. x值: 0.3*bar*sin(rotationY)*cos(rotationX) -> 旁边的阴影产生的偏置
+    //     系数0.3  =>  在barValue为100的时候，rotationX=0, rotationY 从0到90度，发现x应该偏置30
 
-    // 2. y旋转的时候，rotationX造成柱体变高偏置 0.4 * bar * sin(rotationX) * cos(rotationY)
-    // 3. y旋转的时候，旁边的阴影产生的偏置 0.3 * barValue * sin(rotationX)
-    //        在rotationY为90的时候，rotationX为0，阴影不对其造成印象，rotationX为90的时候，偏置需加上30
-    // 4. 当rotationY为90的时候，rotationX改变-> 单纯的y旋转: y_offset*cos(rotationY)并不会使得y的坐标改变
-    //    此时用z进行旋转
+    // 2. y值: rotationX造成柱体变高偏置 0.4 * bar * sin(rotationX) * cos(rotationY)
+    //     当rotationY为0的时候，rotationX从0到90，变高0.4*bar的值
+    //     当rotationY为90的时候，不存在变高偏置
 
-    // 郑注
-    // 1. x旋转后坐标：柱状图右侧阴影在y旋转过程中，产生的偏置 0.3 * bar * sin(rotationY) * cos(rotationX)
+    // 3. y值: 0.3 * barValue * sin(rotationX) -> 右边的阴影产生的偏置
+    //        在rotationY为90的时候，rotationX为0，阴影不对其造成影响，rotationX为90的时候，偏置需加上30
+
+    // 4. y值: x_offset*sin(rotationY)*sin(rotationX) -> x值对y值造成的偏置
+    //     当rotationY为0的时候，进行rotationX时，忽略其他偏置，y值不做改变，即y_offset*cos(rotationY)正确
+    //     当rotationY为90的时候，进行rotationX时，即为2维圆移动，此时y值应该为x_offset*sin(rotationX)
+
+
+    // 进一步解释
+    // 1. x值：柱状图右侧阴影在y旋转过程中，产生的偏置 0.3 * bar * sin(rotationY) * cos(rotationX)
     //               系数0.3  => 在barValue为100的时候，rotationX=0, rotationY 从0到90度，发现x应该偏置30。
     //               0.3 * bar *cos(rotationX) => 柱状图右侧阴影在xoz面的投影
     //               0.3 * bar * sin(rotationY) * sin(rotationY) => 柱状图右侧阴影在xoz面的投影在x轴上的投影
-    // 2. y旋转后坐标：rotationX造成柱体变高偏置 0.4 * bar * sin(rotationX) * cos(rotationY)
-    // 3. 当rotationY为90的时候，rotationX改变-> 单纯的y旋转: y_offset*cos(rotationY)并不会使得y的坐标改变
-    //    此时用z进行旋转
+
+    // 字高度: bar在100的时候, y=10 && bar在0的时候, y=130, 即bar每变化1, y反向变化1.2
 
     property double rotationX: bar3D.scene.activeCamera.xRotation * Math.PI / 180
     property double rotationY: bar3D.scene.activeCamera.yRotation * Math.PI / 180
     Text{
         id: data_1
 
-        property double x_offset: -90
+        property double x_offset: -88
         property double y_offset: - dataModel_1.get(0).expenses * 1.2
         property double barValue: dataModel_1.get(0).expenses
 
@@ -440,7 +443,7 @@ Item {
                                       + 0.1*barValue*Math.sin(rotationX)
                                       + Math.abs(x_offset) * Math.sin(rotationX) * Math.sin(rotationY)
 
-        text: dataModel_2.get(0).expenses.toFixed(1) + "m/s"
+        text: dataModel_2.get(0).expenses.toFixed(1) + "°"
         font.family: "Monaco"
         color: "red"
     }
@@ -461,7 +464,7 @@ Item {
                                       - 0.1*barValue*Math.sin(rotationX)
                                       - Math.abs(x_offset) * Math.sin(rotationX) * Math.sin(rotationY)
 
-        text: dataModel_3.get(0).expenses.toFixed(1) + "m/s"
+        text: dataModel_3.get(0).expenses.toFixed(1) + "m"
         font.family: "Monaco"
         color: "red"
     }
@@ -482,7 +485,7 @@ Item {
                                       - 0.3*barValue*Math.sin(rotationX)
                                       - Math.abs(x_offset) * Math.sin(rotationX) * Math.sin(rotationY)
 
-        text: dataModel_4.get(0).expenses.toFixed(1) + "m/s"
+        text: dataModel_4.get(0).expenses.toFixed(1) + "m"
         font.family: "Monaco"
         color: "red"
     }
