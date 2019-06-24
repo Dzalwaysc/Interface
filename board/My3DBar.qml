@@ -186,7 +186,7 @@ Item {
             anchors.leftMargin: 22
             anchors.bottom: parent.bottom
             color: "white"
-            text: "速度偏差: " + dataModel_1.get(0).expenses + "米/秒"
+            text: "速度偏差: " + "米/秒"
             font.family: "Monaco"
             font.pixelSize: fontpixelSize
         }
@@ -239,7 +239,7 @@ Item {
             anchors.leftMargin: 22
             anchors.bottom: parent.bottom
             color: "white"
-            text: "艏向偏差: " + dataModel_2.get(0).expenses + "度"
+            text: "艏向偏差: " + "度"
             font.family: "Monaco"
             font.pixelSize: fontpixelSize
         }
@@ -292,7 +292,7 @@ Item {
             anchors.leftMargin: 22
             anchors.bottom: parent.bottom
             color: "white"
-            text: "横侧偏差: " + dataModel_3.get(0).expenses + "米"
+            text: "横侧偏差: " + "米"
             font.family: "Monaco"
             font.pixelSize: fontpixelSize
         }
@@ -345,7 +345,7 @@ Item {
             anchors.leftMargin: 22
             anchors.bottom: parent.bottom
             color: "white"
-            text: "目标距离" + dataModel_4.get(0).expenses + "米"
+            text: "目标距离: " + "米"
             font.family: "Monaco"
             font.pixelSize: fontpixelSize
         }
@@ -372,35 +372,139 @@ Item {
         }
     }
 
-    // 值改变
+
     // 字的位置: bar在100的时候, y=10 && bar在0的时候, y=130, 即bar每变化1, y反向变化1.2
     // 当前的y = 130 - 当前时刻的bar * 1.2
 
     // 旋转
-    // 计算的顺序为先旋转x，再旋转y。
-    // 1. x旋转: 在0度的时候, x为32 && 在90度的时候, x为122, 在180度的时候, x为212
-    //  从这里可得坐标初始点为(32, 130-当前时刻的bar*1.2)
-    // 2. 求得x旋转半径，122 - 32 = 90
-    // 3. 求得x旋转后的x坐标，90 - 90*cos(rotationX) + 32
-    // 4. 求得y旋转半径，90*sin(rotationX)*sin(rotationY)
-    // 5. 求得y旋转后的y坐标，90*sin(rotationX)*sin(rotationY) + 130-currentBar*1.2
+    // 1. 求得x旋转半径为 x_offset
+    // 2. 求得x旋转后的x坐标，x_offset * cos(rotationX)
+    // 3. 求得y旋转半径，y_offset    y_offset-Math.sin(rotationX)*20
+    // 4. 求得y旋转后的y坐标，y_offset * cos(rotationY)
 
-    // 在0度, bar为30的时候, y为94 && 在90度，bar为30的时候, y为124
-    // 半径为 dataModel_1.get(0).expenses * 1.2, 原点为130
-    property double rotationX: bar3D.scene.activeCamera.xRotation
-    property double rotationY: bar3D.scene.activeCamera.yRotation
+    // 旋转的时候产生的偏置
+    // 1. x旋转的时候，旁边的阴影产生的偏置 0.3 * bar * sin(rotationY) * cos(rotationX)
+    //              系数0.3  =>  在barValue为100的时候，rotationX=0, rotationY 从0到90度，发现x应该偏置30。
+
+    // 2. y旋转的时候，rotationX造成柱体变高偏置 0.4 * bar * sin(rotationX) * cos(rotationY)
+    // 3. y旋转的时候，旁边的阴影产生的偏置 0.3 * barValue * sin(rotationX)
+    //        在rotationY为90的时候，rotationX为0，阴影不对其造成印象，rotationX为90的时候，偏置需加上30
+    // 4. 当rotationY为90的时候，rotationX改变-> 单纯的y旋转: y_offset*cos(rotationY)并不会使得y的坐标改变
+    //    此时用z进行旋转
+
+    // 郑注
+    // 1. x旋转后坐标：柱状图右侧阴影在y旋转过程中，产生的偏置 0.3 * bar * sin(rotationY) * cos(rotationX)
+    //               系数0.3  => 在barValue为100的时候，rotationX=0, rotationY 从0到90度，发现x应该偏置30。
+    //               0.3 * bar *cos(rotationX) => 柱状图右侧阴影在xoz面的投影
+    //               0.3 * bar * sin(rotationY) * sin(rotationY) => 柱状图右侧阴影在xoz面的投影在x轴上的投影
+    // 2. y旋转后坐标：rotationX造成柱体变高偏置 0.4 * bar * sin(rotationX) * cos(rotationY)
+    // 3. 当rotationY为90的时候，rotationX改变-> 单纯的y旋转: y_offset*cos(rotationY)并不会使得y的坐标改变
+    //    此时用z进行旋转
+
+    property double rotationX: bar3D.scene.activeCamera.xRotation * Math.PI / 180
+    property double rotationY: bar3D.scene.activeCamera.yRotation * Math.PI / 180
     Text{
         id: data_1
-        x: 122 - (122-32)*Math.cos(rotationX*Math.PI/180)
-        y: 130 - dataModel_1.get(0).expenses*1.2  + 90 * Math.sin(rotationX*Math.PI/180) * Math.sin(rotationY*Math.PI/180)    //* Math.cos(rotationY*Math.PI/180)//130 - dataModel_1.get(0).expenses * 1.2
+
+        property double x_offset: -90
+        property double y_offset: - dataModel_1.get(0).expenses * 1.2
+        property double barValue: dataModel_1.get(0).expenses
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: x_offset * Math.cos(rotationX)
+                                        - 0.3*barValue*Math.sin(rotationY)*Math.cos(rotationX);
+        anchors.verticalCenterOffset: y_offset*Math.cos(rotationY)
+                                      - 0.4*barValue*Math.sin(rotationX)*Math.cos(rotationY)
+                                      + 0.3*barValue*Math.sin(rotationX)
+                                      + Math.abs(x_offset) * Math.sin(rotationX) * Math.sin(rotationY)
+
         text: dataModel_1.get(0).expenses.toFixed(1) + "m/s"
         font.family: "Monaco"
-        font.pixelSize: fontpixelSize
-        color: "white"
+        color: "red"
+
+        onXChanged: {
+            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
+                        + "  x: " + data_1.anchors.horizontalCenterOffset + "  y:" + data_1.anchors.verticalCenterOffset)
+        }
     }
-    onRotationYChanged: {
-        console.log(rotationY);
-        console.log(rotationX)
+
+    Text{
+        id: data_2
+
+        property double x_offset: -30
+        property double y_offset: - dataModel_2.get(0).expenses * 1.2
+        property double barValue: dataModel_2.get(0).expenses
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: x_offset * Math.cos(rotationX)
+                                        - 0.1*barValue*Math.sin(rotationY)*Math.cos(rotationX);
+        anchors.verticalCenterOffset: y_offset*Math.cos(rotationY)
+                                      - 0.2*barValue*Math.sin(rotationX)*Math.cos(rotationY)
+                                      + 0.1*barValue*Math.sin(rotationX)
+                                      + Math.abs(x_offset) * Math.sin(rotationX) * Math.sin(rotationY)
+
+        text: dataModel_2.get(0).expenses.toFixed(1) + "m/s"
+        font.family: "Monaco"
+        color: "red"
+
+        onXChanged: {
+            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
+                        + "  x: " + data_2.anchors.horizontalCenterOffset + "  y:" + data_2.anchors.verticalCenterOffset)
+        }
+    }
+
+    Text{
+        id: data_3
+
+        property double x_offset: 30
+        property double y_offset: - dataModel_3.get(0).expenses * 1.2
+        property double barValue: dataModel_3.get(0).expenses
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: x_offset * Math.cos(rotationX)
+                                        + 0.1*barValue*Math.sin(rotationY)*Math.cos(rotationX);
+        anchors.verticalCenterOffset: y_offset*Math.cos(rotationY)
+                                      + 0.2*barValue*Math.sin(rotationX)*Math.cos(rotationY)
+                                      - 0.1*barValue*Math.sin(rotationX)
+                                      - Math.abs(x_offset) * Math.sin(rotationX) * Math.sin(rotationY)
+
+        text: dataModel_3.get(0).expenses.toFixed(1) + "m/s"
+        font.family: "Monaco"
+        color: "red"
+
+        onXChanged: {
+            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
+                        + "  x: " + data_3.anchors.horizontalCenterOffset + "  y:" + data_3.anchors.verticalCenterOffset)
+        }
+    }
+
+    Text{
+        id: data_4
+
+        property double x_offset: 90
+        property double y_offset: - dataModel_4.get(0).expenses * 1.2
+        property double barValue: dataModel_4.get(0).expenses
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenterOffset: x_offset * Math.cos(rotationX)
+                                        + 0.3*barValue*Math.sin(rotationY)*Math.cos(rotationX);
+        anchors.verticalCenterOffset: y_offset*Math.cos(rotationY)
+                                      + 0.4*barValue*Math.sin(rotationX)*Math.cos(rotationY)
+                                      - 0.3*barValue*Math.sin(rotationX)
+                                      - Math.abs(x_offset) * Math.sin(rotationX) * Math.sin(rotationY)
+
+        text: dataModel_4.get(0).expenses.toFixed(1) + "m/s"
+        font.family: "Monaco"
+        color: "red"
+
+        onXChanged: {
+            console.log("RotationX: " + rotationX*180/Math.PI + "  RotationY: " + rotationY*180/Math.PI
+                        + "  x: " + data_4.anchors.horizontalCenterOffset + "  y:" + data_4.anchors.verticalCenterOffset)
+        }
     }
 
     Component.onCompleted: {
