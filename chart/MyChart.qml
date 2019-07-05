@@ -121,6 +121,13 @@ Item{
         chartView.zoomReset();
     }
 
+    Image{
+        id: googleMag
+        anchors.centerIn: parent
+        width: 400; height: 400
+        source: "image/map.png"
+    }
+
     ChartView{
         id: chartView
         anchors.fill: parent
@@ -128,11 +135,12 @@ Item{
         antialiasing: true       //是否抗锯齿
         legend.visible: false
         backgroundColor: Qt.rgba(0, 22, 255, 0.1)
+        plotAreaColor: "black"
 //        theme:ChartView.ChartThemeHighContrast
 
         // margin between chart rectangle and the plot area
-//        margins.top: 0
-        margins.left: 1
+        margins.top: 0
+        margins.left: 0
         margins.bottom: 0
         margins.right: 0
 
@@ -141,8 +149,8 @@ Item{
             min: axisX_min
             max: axisX_max
             lineVisible: false
-            labelsVisible: true
-            gridVisible: true
+            labelsVisible: false
+            gridVisible: false
             labelsColor: "red"
             labelsFont.family: fontfamily
             labelsFont.pixelSize: fontpixelSize
@@ -164,8 +172,8 @@ Item{
             min: axisY_min
             max: axisY_max
             lineVisible: false
-            labelsVisible: true
-            gridVisible: true
+            labelsVisible: false
+            gridVisible: false
             labelsColor: "red"
             labelsFont.family: fontfamily
             labelsFont.pixelSize: fontpixelSize
@@ -189,7 +197,6 @@ Item{
             axisY: axisY
             useOpenGL: true // 使chart再增加点的时候更加流畅
         }
-
 
         //  接受散点图
         ScatterSeries{

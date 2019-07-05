@@ -15,10 +15,7 @@
         <file>chart/PointList.qml</file>
         <file>chart/RotationButton.qml</file>
         <file>menu/MyDate.qml</file>
-        <file>menu/SerialPortButton.qml</file>
-        <file>menu/SerialPortMessage.qml</file>
         <file>menu/SetButton.qml</file>
-        <file>menu/SerialPortListView.qml</file>
         <file>menu/image/setBtn.png</file>
         <file>menu/image/start.png</file>
         <file>menu/WlanButton.qml</file>
@@ -36,14 +33,10 @@
         <file>menu/image/stop.png</file>
         <file>menu/WlanServerMessage.qml</file>
         <file>menu/WlanUDPMessage.qml</file>
-        <file>menu/SerialPortHandleMessage.qml</file>
         <file>button/ButtonOne.qml</file>
         <file>menu/WlanClientMessage.qml</file>
-        <file>menu/SerialPortVehicleMessage.qml</file>
-        <file>menu/SerialPortGPSMessage.qml</file>
         <file>board/CourseBoard.qml</file>
         <file>board/VelocityBoard.qml</file>
-        <file>board/WaveProgress2.qml</file>
         <file>background/MetorShower.qml</file>
         <file>button/BoxOne.qml</file>
         <file>button/image/boxOne.png</file>
@@ -65,5 +58,38 @@
         <file>board/image/outerCircle3.png</file>
         <file>board/Bar.qml</file>
         <file>board/My3DBar.qml</file>
+        <file>serialport/image/bian.png</file>
+        <file>serialport/image/serialBtn.png</file>
+        <file>serialport/SerialPortMessage.qml</file>
+        <file>button/TextScreen.qml</file>
+        <file>button/Message.qml</file>
+        <file>button/image/bian.png</file>
+        <file>serialport/SerialPort.qml</file>
+        <file>control/image/setBtn.png</file>
+        <file>control/Control.qml</file>
+        <file>control/ControlButton.qml</file>
+        <file>control/ControlList.qml</file>
+        <file>control/SimulationMessage.qml</file>
+        <file>serialport/image/circleInter1.png</file>
+        <file>serialport/image/circleInter2.png</file>
+        <file>serialport/image/circleInter3.png</file>
+        <file>serialport/image/circleInter4.png</file>
+        <file>serialport/image/circleOuter.png</file>
+        <file>serialport/SerialPortButton.qml</file>
+        <file>serialport/SerialPortList.qml</file>
+        <file>serialport/SerialPortMessageRadio.qml</file>
+        <file>board/FuelTank.qml</file>
+        <file>serialport/image/circleOuter2.png</file>
+        <file>button/image/circle.png</file>
+        <file>button/image/close.png</file>
+        <file>serialport/radio/image/checked.png</file>
+        <file>serialport/radio/image/switchoff.png</file>
+        <file>serialport/radio/image/switchon.png</file>
+        <file>serialport/radio/image/unchecked.png</file>
+        <file>serialport/radio/IOButton.qml</file>
+        <file>serialport/radio/IOConsole.qml</file>
+        <file>serialport/radio/PhotoConsole.qml</file>
+        <file>serialport/radio/PhotpConsoleRes.js</file>
+        <file>chart/image/map.png</file>
     </qresource>
 </RCC>

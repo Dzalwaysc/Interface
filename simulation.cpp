@@ -17,7 +17,7 @@ Simulation::~Simulation()
 
 void Simulation::readTxtData()
 {
-    QFile file("C:/Users/Administrator/Desktop/out.txt");
+    QFile file("/Users/oliver/C++Projects/Interface/out.txt");
     //QFile file("/Users/oliver/C++Projects/Interface/out.txt");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         return;

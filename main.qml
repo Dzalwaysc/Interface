@@ -8,6 +8,8 @@ import "chart"
 import "parapad"
 import "board"
 import "background"
+import "serialport"
+import "control"
 import "button"
 
 Window {
@@ -27,25 +29,17 @@ Window {
         source: "background/image/frame.png"
     }
 
-    // 流星
-    MetorShower{
-        anchors.centerIn: parent
-    }
-
     /**************** 菜单栏 ************************/
     // 设置按钮
-    SetButton{
-        id: setBtn
+    ControlButton{
+        id: controlBtn
         posX: 240; posY: 160
         width: 30; height: 30
         onTrigger: {
             // 针对set的列表
-            if(setBtn.state == "hover") setListView.listView.state = "";
-            else if(setBtn.state == "active") setListView.listView.state = "active";
-            setListView.close();
-            // 针对serialport
-            serialPortBtn.state = "";
-            serialPortListView.listView.state = ""; serialPortListView.close();
+            if(controlBtn.state == "hover") control.listView.state = "";
+            else if(controlBtn.state == "active") control.listView.state = "active";
+            control.close();
             // 针对wlan
             wlanBtn.state = "";
             wlanListView.listView.state = ""; wlanListView.close();
@@ -61,35 +55,6 @@ Window {
         }
     }
 
-    // 串口按钮
-    SerialPortButton{
-        id: serialPortBtn
-        posX: 200; posY: 160
-        width: 30; height: 30
-        onTrigger: {
-            // 针对serialport的列表
-            if(serialPortBtn.state === "hover") serialPortListView.listView.state = "";
-            else if(serialPortBtn.state === "active") serialPortListView.listView.state = "active";
-            serialPortListView.close();
-            // 针对set
-            setBtn.state = "";
-            setListView.listView.state = "";   setListView.close()
-            // 针对wlan
-            wlanBtn.state = "";
-            wlanListView.listView.state = ""; wlanListView.close();
-            //针对parapad
-            parapadbutton.state = ""; parapad.state = ""
-        }
-
-        BoxOne{
-            mW: 40; mH:20
-            opacity: parent.state === "hover" ? 1 : 0
-            anchors.left: parent.left; anchors.leftMargin: -3
-            anchors.bottom: parent.top
-            context: "串口"
-        }
-    }
-
     // 无线按钮
     WlanButton{
         id: wlanBtn
@@ -100,12 +65,9 @@ Window {
             if (wlanBtn.state === "hover") wlanListView.listView.state = ""
             else if (wlanBtn.state === "active") wlanListView.listView.state = "active"
             wlanListView.close();
-            // 针对serialport
-            serialPortBtn.state = "";
-            serialPortListView.listView.state = ""; serialPortListView.close();
             // 针对set
-            setBtn.state = "";
-            setListView.listView.state = "";   setListView.close()
+            controlBtn.state = "";
+            control.listView.state = "";   control.close()
             //针对parapad
             parapadbutton.state = ""; parapad.state = ""
         }
@@ -119,27 +81,21 @@ Window {
     }
 
     // 设置选项卡
-    SetListView{
-        id: setListView
-        posX: 240; posY: 195
-        delegate_width: 80
-        delegate_height: 30
+    Control{
+        id: control
     }
 
     // 串口选项卡
-    SerialPortListView{
-        id: serialPortListView
-        posX: 200; posY: 195
-        delegate_width: 80
-        delegate_height: 30
+    SerialPort{
+        id: serialPort
     }
 
     // 无线选项卡
     WlanListView{
         id: wlanListView
         posX: 160; posY: 195
-        delegate_width: 80
-        delegate_height: 30
+        delegate_width: 60
+        delegate_height: 20
     }
 
     /**************** 随体坐标 ************************/
@@ -192,10 +148,10 @@ Window {
 
         // 创建与Simulation的信号连接
         Connections{
-            target: setListView.simulationMessage
+            target: control.simulationMessage
             onUpdateSimulate: {
-                myChart.pathSeries.append(setListView.simulationMessage.actual_x,
-                                          setListView.simulationMessage.actual_y)
+                myChart.pathSeries.append(control.simulationMessage.actual_x,
+                                          control.simulationMessage.actual_y)
             }
             onResetSimulate: {
                 myChart.pathSeries.clear();
@@ -219,14 +175,6 @@ Window {
         onParapadTrigger: {
             if(chartbutton.state == "active") myChart.state = "active"
             else if(chartbutton.state == "hover") myChart.state = ""
-
-            // 针对serialport
-            //serialPortBtn.state = "";
-            //serialPortListView.listView.state = ""; serialPortListView.close();
-            // 针对wlan
-            //wlanBtn.state = "";
-            //wlanListView.listView.state = ""; wlanListView.close();
-            //针对set
         }
 
         // 提示框
@@ -319,16 +267,16 @@ Window {
     ParaPad{
         id: parapad
         posX: 1025; posY: 20
-        north_X: setListView.simulationMessage.actual_x
-        east_Y: setListView.simulationMessage.actual_y
-        yaw: setListView.simulationMessage.actual_yaw
-        u: setListView.simulationMessage.actual_u
-        v: setListView.simulationMessage.actual_v
-        r: setListView.simulationMessage.actual_r
+        north_X: control.simulationMessage.actual_x
+        east_Y: control.simulationMessage.actual_y
+        yaw: control.simulationMessage.actual_yaw
+        u: control.simulationMessage.actual_u
+        v: control.simulationMessage.actual_v
+        r: control.simulationMessage.actual_r
 
         // 创建与Simulation的信号连接
         Connections{
-            target: setListView.simulationMessage
+            target: control.simulationMessage
             onParaPopup: {
                 parapadbutton.state = "active"
                 parapad.state = "active"
@@ -347,14 +295,6 @@ Window {
         onParapadTrigger: {
             if(parapadbutton.state == "active") parapad.state = "active"
             else if(parapadbutton.state == "hover") parapad.state = ""
-
-            // 针对serialport
-            //serialPortBtn.state = "";
-            //serialPortListView.listView.state = ""; serialPortListView.close();
-            // 针对wlan
-            //wlanBtn.state = "";
-            //wlanListView.listView.state = ""; wlanListView.close();
-            //针对set
         }
 
         // 提示框
@@ -366,7 +306,6 @@ Window {
             isMirror: true
             context: "艇体参数面板"
         }
-
     }
 
     /**************** 仪表盘 ************************/
@@ -374,32 +313,29 @@ Window {
     VelocityBoard{
         id: dashBoard
         x: 140; y: 20
-        currentValue: setListView.simulationMessage.actual_u
+        currentValue: control.simulationMessage.actual_u
     }
 
     // 航向仪表盘
     CourseBoard{
         id: courseBoard
         x: 300; y: 20
-        currentValue: setListView.simulationMessage.actual_yaw
+        currentValue: control.simulationMessage.actual_yaw
     }
 
     // 航向速度仪表盘
     CourseRateBoard{
         id: courseRateBoard
         x: 23; y: 45
-        currentValue: setListView.simulationMessage.actual_r
+        currentValue: control.simulationMessage.actual_r
     }
 
     // 油量
-    WaveProgress2{
+    FuelTank{
         x: 50; y: 30
     }
 
-//    Bar{
-//        x: 0; y: 480
+//    My3DBar{
+//        x: 0; y: 440
 //    }
-    My3DBar{
-        x: 0; y: 440
-    }
 }

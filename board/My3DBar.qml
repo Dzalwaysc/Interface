@@ -5,7 +5,7 @@ Item {
     height: 300
     x: 50
     y: 100
-    z:1
+    z:0
 
     property double cameraRotationX: 0 // 初始的相机旋转角度
     property double cameraRotationY: 0 // 初始的相机旋转角度

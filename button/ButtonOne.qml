@@ -30,7 +30,7 @@ Rectangle{
 
     //内置属性
     property string fontfamily: "Monaco"
-    property real fontpielSize: 15             //字体大小
+    property real fontpielSize: 13             //字体大小
 
     //用户信号
     signal clicked()
@@ -52,6 +52,7 @@ Rectangle{
 
     MouseArea{
         anchors.fill: parent
+        enabled: parent.opacity == 1 ? true : false
         onClicked: {
             animation.start()
             btnOne.clicked();

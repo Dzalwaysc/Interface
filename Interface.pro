@@ -17,13 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    slavethread.cpp \
     clientthread.cpp \
     fortuneserver.cpp \
     fortunethread.cpp \
     udpclass.cpp \
     simulation.cpp \
-    simulationthread.cpp
+    simulationthread.cpp \
+    serialport.cpp \
+    serialportthread.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,10 +40,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    slavethread.h \
     clientthread.h \
     fortuneserver.h \
     fortunethread.h \
     udpclass.h \
     simulation.h \
-    simulationthread.h
+    simulationthread.h \
+    serialport.h \
+    serialportthread.h
